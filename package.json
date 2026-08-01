@@ -26,7 +26,7 @@
     },
     "lint-staged": {
         "**/*.php": [
-            "./vendor/bin/sail pint"
+            "vendor/bin/pint"
         ],
         "**/*.{js,css,json}": [
             "npx prettier --write"

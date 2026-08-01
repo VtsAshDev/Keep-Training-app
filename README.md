@@ -104,21 +104,6 @@ php artisan filament:install --panels
 php artisan serve
 ```
 
-## Configuração do Filament e PWA
-
-Certifique-se de configurar a paleta de cores no painel do Filament em `app/Providers/Filament/AdminPanelProvider.php`:
-
-```php
-use Filament\Support\Colors\Color;
-
-$panel->colors([
-    'primary' => Color::hex('#FF6D1D'),
-    'warning' => Color::hex('#FFA518'),
-    'gray' => Color::hex('#E1DEDE'),
-    'black' => Color::hex('#000000'),
-]);
-```
-
 Para a configuração do PWA, utilize um pacote como o `ladumor/laravel-pwa` e publique os assets.
 
 ```bash
