@@ -52,10 +52,10 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd /opt/projects/Keep-Training-app
-            gpl origin main
-            sail composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
-            sail artisan migrate --force
-            sail artisan optimize:clear
-            sail artisan optimize
-            sail artisan view:cache
-            sail artisan event:cache
+            git pull origin main
+            ./vendor/bin/sail composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+            ./vendor/bin/sail artisan migrate --force
+            ./vendor/bin/sail artisan optimize:clear
+            ./vendor/bin/sail artisan optimize
+            ./vendor/bin/sail artisan view:cache
+            ./vendor/bin/sail artisan event:cache
