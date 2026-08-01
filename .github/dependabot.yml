@@ -10,3 +10,23 @@ updates:
       github-actions:
         patterns:
           - "*"
+
+  # 2. Atualiza o Laravel outros pacotes PHP
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      php-dependencies:
+        patterns:
+          - "*"
+
+  # 3. Atualiza as dependências do frontend
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      node-dependencies:
+        patterns:
+          - "*"

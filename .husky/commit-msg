@@ -1,33 +1,21 @@
+#!/bin/bash
+
 NC='\033[0m'
-GREEN='\033[0;32m'
-RED='\033[1;31m'
-BLUE='\033[1;34m'
+BBlue='\033[1;34m'
+BRed='\033[1;31m'
 
-echo -e "${BLUE}▶ Preparando o commit...${NC}\n"
+REGEX_ISSUE_ID="[a-zA-Z0-9,\.\_\-]+-[0-9]+"
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+ISSUE_ID=$(echo "$BRANCH_NAME" | grep -o -E "$REGEX_ISSUE_ID")
+COMMIT_MESSAGE=$(cat "$1")
 
-echo -n "1. PHPStan: "
-PHPSTAN_OUT=$(./vendor/bin/sail bin phpstan 2>&1)
-if [ $? -ne 0 ]; then
-    echo -e "${RED}Falhou ❌${NC}\n"
-    echo "$PHPSTAN_OUT"
+if [ -z "$ISSUE_ID" ]; then
+    echo -e "${BRed}Branch não está no padrão que deveria mestre... ${NC}"
     exit 1
 fi
-echo -e "${GREEN}OK ✔️${NC}"
 
-echo -n "2. Testes: "
-TEST_OUT=$(./vendor/bin/sail artisan test --parallel 2>&1)
-if [ $? -ne 0 ]; then
-    echo -e "${RED}Falhou ❌${NC}\n"
-    echo "$TEST_OUT"
-    exit 1
+if echo "$COMMIT_MESSAGE" | grep -q "^$ISSUE_ID"; then
+    exit 0
 fi
-echo -e "${GREEN}OK ✔️${NC}"
 
-echo -n "3. Formatação: "
-LINT_OUT=$(npx lint-staged -q 2>&1)
-if [ $? -ne 0 ]; then
-    echo -e "${RED}Falhou ❌${NC}\n"
-    echo "$LINT_OUT"
-    exit 1
-fi
-echo -e "${GREEN}OK ✔️${NC}\n"
+echo "$ISSUE_ID: $COMMIT_MESSAGE" > "$1"
