@@ -52,8 +52,10 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd /opt/projects/Keep-Training-app
-            git pull origin main
-            ./vendor/bin/sail composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+            git config --global --add safe.directory /opt/projects/Keep-Training-app
+            git fetch --all
+            git reset --hard origin/main
+            docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/app" -w /app composer:latest composer install --no-interaction --prefer-dist --optimize-autoloader
             ./vendor/bin/sail artisan migrate --force
             ./vendor/bin/sail artisan optimize:clear
             ./vendor/bin/sail artisan optimize
