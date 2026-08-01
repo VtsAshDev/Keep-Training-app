@@ -1,17 +1,35 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
-./vendor/bin/sail bin phpstan
-# shellcheck disable=SC2181
+NC='\033[0m'
+GREEN='\033[0;32m'
+RED='\033[1;31m'
+BLUE='\033[1;34m'
+
+echo -e "${BLUE}▶ Preparando o commit...${NC}\n"
+
+echo -n "1. PHPStan: "
+PHPSTAN_OUT=$(./vendor/bin/sail bin phpstan 2>&1)
 if [ $? -ne 0 ]; then
-    echo "Opa! Deu ruim aqui com PHPSTAN. Arrume antes de continuar... 😉"
+    echo -e "${RED}Falhou ❌${NC}\n"
+    echo "$PHPSTAN_OUT"
     exit 1
 fi
+echo -e "${GREEN}OK ✔️${NC}"
 
-./vendor/bin/sail artisan test --parallel
-# shellcheck disable=SC2181
+echo -n "2. Testes: "
+TEST_OUT=$(./vendor/bin/sail artisan test --parallel 2>&1)
 if [ $? -ne 0 ]; then
-    echo "Opa! Deu ruim com algum teste. Arrume antes de continuar... 😉"
+    echo -e "${RED}Falhou ❌${NC}\n"
+    echo "$TEST_OUT"
     exit 1
 fi
+echo -e "${GREEN}OK ✔️${NC}"
 
-npx lint-staged
+echo -n "3. Formatação: "
+LINT_OUT=$(npx lint-staged -q 2>&1)
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Falhou ❌${NC}\n"
+    echo "$LINT_OUT"
+    exit 1
+fi
+echo -e "${GREEN}OK ✔️${NC}\n"
