@@ -61,3 +61,5 @@ jobs:
             ./vendor/bin/sail artisan optimize
             ./vendor/bin/sail artisan view:cache
             ./vendor/bin/sail artisan event:cache
+            ./vendor/bin/sail npm install
+            ./vendor/bin/sail npm run build
