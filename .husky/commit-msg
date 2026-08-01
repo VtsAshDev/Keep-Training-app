@@ -1,9 +1,4 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-# Cores
 NC='\033[0m'
-# shellcheck disable=SC2034
 BBlue='\033[1;34m'
 BRed='\033[1;31m'
 
@@ -17,10 +12,8 @@ if [ -z "$ISSUE_ID" ]; then
     exit 1
 fi
 
-# i.g. HEY-1: HEY-1: my feature
-# shellcheck disable=SC3010
-if [[ $COMMIT_MESSAGE == $ISSUE_ID* ]]; then
+if echo "$COMMIT_MESSAGE" | grep -q "^$ISSUE_ID"; then
     exit 0
 fi
 
-echo "$ISSUE_ID: $COMMIT_MESSAGE" >$1
+echo "$ISSUE_ID: $COMMIT_MESSAGE" > "$1"
