@@ -1,0 +1,33 @@
+NC='\033[0m'
+GREEN='\033[0;32m'
+RED='\033[1;31m'
+BLUE='\033[1;34m'
+
+echo -e "${BLUE}▶ Preparando o commit...${NC}\n"
+
+echo -n "1. PHPStan: "
+PHPSTAN_OUT=$(./vendor/bin/sail bin phpstan 2>&1)
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Falhou ❌${NC}\n"
+    echo "$PHPSTAN_OUT"
+    exit 1
+fi
+echo -e "${GREEN}OK ✔️${NC}"
+
+echo -n "2. Testes: "
+TEST_OUT=$(./vendor/bin/sail artisan test --parallel 2>&1)
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Falhou ❌${NC}\n"
+    echo "$TEST_OUT"
+    exit 1
+fi
+echo -e "${GREEN}OK ✔️${NC}"
+
+echo -n "3. Formatação: "
+LINT_OUT=$(npx lint-staged -q 2>&1)
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Falhou ❌${NC}\n"
+    echo "$LINT_OUT"
+    exit 1
+fi
+echo -e "${GREEN}OK ✔️${NC}\n"

@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+./vendor/bin/sail bin phpstan
+# shellcheck disable=SC2181
+if [ $? -ne 0 ]; then
+    echo "Opa! Deu ruim aqui com PHPSTAN. Arrume antes de continuar... 😉"
+    exit 1
+fi
+
+./vendor/bin/sail artisan test --parallel
+# shellcheck disable=SC2181
+if [ $? -ne 0 ]; then
+    echo "Opa! Deu ruim com algum teste. Arrume antes de continuar... 😉"
+    exit 1
+fi
+
+npx lint-staged
