@@ -1,3 +1,48 @@
+<?php
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
+use Livewire\Attributes\Validate;
+use Livewire\Component;
+
+new class extends Component
+{
+    #[Validate(['required', 'email'])]
+    public string $email = '';
+
+    #[Validate(['required', 'string', 'min:8'])]
+    public string $password = '';
+
+    public function login()
+    {
+        $this->validate();
+
+        $throttleKey = Str::transliterate(Str::lower($this->email)).'|'.request()->ip();
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+
+            $this->addError('email', "Muitas tentativas de login. Tente novamente em {$seconds} segundos.");
+
+            return;
+        }
+
+        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+            RateLimiter::clear($throttleKey);
+
+            session()->regenerate();
+
+            return redirect()->intended('/dashboard');
+        }
+
+        RateLimiter::hit($throttleKey);
+
+        $this->addError('email', 'As credenciais fornecidas estão incorretas.');
+    }
+};
+?>
+
 <div class="bg-surface w-full max-w-[360px] border-[3px] border-primary block-shadow-primary p-8">
 
     <div class="flex justify-center mb-6 cursor-pointer" onclick="toggleView('welcome')" title="Voltar">
@@ -10,7 +55,7 @@
     <div class="border-t-2 border-primary mb-6"></div>
 
 
-    <form action="#" method="POST" class="space-y-4">
+    <form wire:submit="login" class="space-y-4">
 
         <div class="space-y-1">
             <label class="block font-label-bold text-label-bold uppercase text-primary font-bold">E-MAIL</label>
@@ -18,8 +63,9 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-on-surface-variant mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                <input type="email" placeholder="ATLETA@KEEPTRAINING.COM" class="w-full bg-transparent outline-none font-mono-data text-sm placeholder:text-outline-variant text-primary uppercase" required>
+                <input type="email" wire:model="email" placeholder="ATLETA@KEEPTRAINING.COM" class="w-full bg-transparent outline-none font-mono-data text-sm placeholder:text-outline-variant text-primary uppercase" required>
             </div>
+            @error('email') <span class="text-red-500 text-xs font-bold">{{ $message }}</span> @enderror
         </div>
 
 
@@ -32,8 +78,9 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-on-surface-variant mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
-                <input type="password" placeholder="••••••••" class="w-full bg-transparent outline-none font-mono-data text-sm placeholder:text-outline-variant text-primary" required>
+                <input type="password" wire:model="password" placeholder="••••••••" class="w-full bg-transparent outline-none font-mono-data text-sm placeholder:text-outline-variant text-primary" required>
             </div>
+            @error('password') <span class="text-red-500 text-xs font-bold">{{ $message }}</span> @enderror
         </div>
 
 
