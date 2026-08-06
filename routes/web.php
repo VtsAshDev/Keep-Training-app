@@ -25,5 +25,5 @@ Route::get('/auth/google/callback', function () {
 
     Auth::login($user);
 
-    return redirect('/dashboard');
+    return redirect('/intern');
 });
