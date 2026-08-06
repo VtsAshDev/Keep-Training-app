@@ -47,14 +47,13 @@ new class extends Component
 
         $this->redirect($url);
     }
-
 };
 ?>
 
 <div class="bg-surface w-full max-w-[360px] border-[3px] border-primary block-shadow-primary p-8">
 
     <div class="flex justify-center mb-6 cursor-pointer" onclick="toggleView('welcome')" title="Voltar">
-        <img src="/icon-kt.png" alt="Keep Training Logo" class="w-24 h-24 object-contain block-shadow-primary">
+        <img src="/icon-kt.png" alt="Keep Training Logo" class="w-24 h-24 object-contain ">
     </div>
 
 
