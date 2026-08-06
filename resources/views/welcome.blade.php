@@ -39,7 +39,7 @@
 
 
     <div id="login-view" class="w-full flex-1 flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-300">
-        <x-welcome-login />
+        @livewire('login')
     </div>
 </main>
 
@@ -47,18 +47,18 @@
     function toggleView(view) {
         const welcomeView = document.getElementById('welcome-view');
         const loginView = document.getElementById('login-view');
-        
+
         if (view === 'login') {
             welcomeView.classList.remove('opacity-100');
             welcomeView.classList.add('opacity-0');
-            
+
             setTimeout(() => {
                 welcomeView.classList.add('hidden');
                 welcomeView.classList.remove('flex');
-                
+
                 loginView.classList.remove('hidden');
                 loginView.classList.add('flex');
-                
+
                 setTimeout(() => {
                     loginView.classList.remove('opacity-0');
                     loginView.classList.add('opacity-100');
@@ -67,14 +67,14 @@
         } else {
             loginView.classList.remove('opacity-100');
             loginView.classList.add('opacity-0');
-            
+
             setTimeout(() => {
                 loginView.classList.add('hidden');
                 loginView.classList.remove('flex');
-                
+
                 welcomeView.classList.remove('hidden');
                 welcomeView.classList.add('flex');
-                
+
                 setTimeout(() => {
                     welcomeView.classList.remove('opacity-0');
                     welcomeView.classList.add('opacity-100');
