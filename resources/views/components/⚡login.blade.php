@@ -43,8 +43,11 @@ new class extends Component
 
     public function loginGoogle()
     {
-        return Socialite::driver('google')->redirect();
+        $url = Socialite::driver('google')->redirect()->getTargetUrl();
+
+        $this->redirect($url);
     }
+
 };
 ?>
 
