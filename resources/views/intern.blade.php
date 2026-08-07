@@ -112,7 +112,7 @@
                 <x-tabs.dieta />
             </div>
             <div id="tab-content-suplementacao" class="tab-panel">
-                <x-tabs.suplementacao />
+                <livewire:tabs.suplementacao/>
             </div>
             <div id="tab-content-saude" class="hidden tab-panel">
                 <x-tabs.saude />
