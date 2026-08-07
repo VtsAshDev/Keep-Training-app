@@ -9,6 +9,7 @@ class Suplemento extends Model
 {
     protected $guarded = [];
 
+    /** @return HasMany<ConsumoDiario, $this> */
     public function consumos(): HasMany
     {
         return $this->hasMany(ConsumoDiario::class);

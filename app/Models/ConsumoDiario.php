@@ -11,6 +11,7 @@ class ConsumoDiario extends Model
 
     protected $guarded = [];
 
+    /** @return BelongsTo<Suplemento, $this> */
     public function suplemento(): BelongsTo
     {
         return $this->belongsTo(Suplemento::class);
