@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -13,6 +14,8 @@ new class extends Component
 
     #[Validate(['required', 'string', 'min:8'])]
     public string $password = '';
+
+    public bool $remember = true;
 
     public function login()
     {
@@ -28,12 +31,12 @@ new class extends Component
             return;
         }
 
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+        if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             RateLimiter::clear($throttleKey);
 
             session()->regenerate();
 
-            return redirect()->intended('/dashboard');
+            return redirect()->intended(route('intern'));
         }
 
         RateLimiter::hit($throttleKey);
@@ -90,6 +93,10 @@ new class extends Component
             @error('password') <span class="text-red-500 text-xs font-bold">{{ $message }}</span> @enderror
         </div>
 
+        <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" wire:model="remember" class="w-4 h-4 rounded-sm text-primary focus:ring-primary border-2 border-primary">
+            <span class="font-label-bold text-[10px] uppercase text-primary font-bold">Manter conectado</span>
+        </label>
 
         <button type="submit" class="w-full mt-6 bg-secondary-container hover:bg-secondary text-primary font-headline-md flex items-center justify-center gap-2 p-3 border-2 border-primary block-shadow-primary transition-all press-effect">
             <span class="font-black uppercase tracking-tight text-lg">ENTRAR</span>
