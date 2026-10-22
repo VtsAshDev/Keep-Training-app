@@ -11,7 +11,8 @@ Este arquivo é a referência do projeto para escopo, convenções, modelo de da
 - Branches seguem o padrão do hook `commit-msg` (`KT-<n>`, ex.: `KT-15`); commits no formato `KT-<n>: [TIPO]:Descrição`. A `main` e a VPS continuam rodando o Keep Training até a etapa 6.
 - Etapa 1 (Base limpa): **concluída** na branch `KT-15`.
 - Etapa 2 (Design system): **concluída** na branch `KT-16`, revisada pelo dono em `/dev/ui`.
-- Etapa em andamento: **3. Dados e regras do Treino** na branch `KT-17`: migrations, models, Enums, Actions e testes prontos, aguardando revisão do dono.
+- Etapa 3 (Dados e regras do Treino): **concluída** na branch `KT-17`.
+- Etapa em andamento: **4. Telas do Treino e tela Hoje** na branch `KT-18`: telas prontas, aguardando revisão do dono.
 
 ## Stack
 
@@ -104,7 +105,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 
 | Tabela | Campos principais | Regras |
 |---|---|---|
-| users | name, email, password, weekly_workout_goal (padrão 4) | Núcleo; criado no login Google |
+| users | name, email, password, weekly_workout_goal (padrão 4), last_login_method (`google` ou `email`) | Núcleo; criado no login Google |
 | exercises | user_id (nulo = catálogo padrão), name, muscle_group, equipment | Usuário vê os padrão + os seus |
 | workout_plans | user_id, name, position, archived_at, notes | Ficha; arquivar em vez de apagar |
 | workout_plan_exercises | workout_plan_id, exercise_id, position, sets, reps_min, reps_max, rest_seconds, notes | Exercícios da ficha, em ordem |
@@ -185,7 +186,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - **2026-10-22** — A branch `keep-focus` virou `KT-15`: o hook `commit-msg` rejeita branches fora do padrão `KT-<n>`.
 - **2026-10-22** — O login por e-mail e senha (componente `core.login`) é mantido, ao lado do login Google.
 - **2026-10-22** — As migrations `diet_plans` e `diet_plan_items` são mantidas no repositório, sem models nem telas. Dieta continua fora do escopo do MVP.
-- **2026-10-22** — O componente legado `components/tabs/⚡suplementacao.blade.php` fica no lugar, fora da navegação e sem rota, como referência até ser substituído pelas Actions e telas do módulo Treino.
+- **2026-10-22** — O componente legado `components/tabs/⚡suplementacao.blade.php` foi removido na etapa 4, substituído pelas telas do Treino. Os models e tabelas antigos (`Suplemento`, `ConsumoDiario`) continuam até a etapa 5.
 - **2026-10-22** — Os ícones do PWA foram provisórios na etapa 1; agora são o monograma "KF" em `public/icons/`, conforme a identidade visual.
 - **2026-10-22** — Todo commit traz no corpo um resumo enxuto de tudo o que foi feito (ver "Convenções").
 - **2026-10-22** — Catálogo de exercícios: por enquanto não há catálogo padrão; o usuário cadastra os próprios exercícios. `exercises.user_id` continua aceitando nulo para receber depois um catálogo vindo de uma API externa.
@@ -232,3 +233,13 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - Meta semanal: conta treinos finalizados pela data de início; semanas passadas são avaliadas com a meta atual do usuário (não há histórico de metas).
 - `supplement_logs.date` é gravado como timestamp à meia-noite (cast `date`); consultas por dia usam `whereDate`.
 - Exclusões: apagar um exercício usado em ficha ou histórico é bloqueado (`restrictOnDelete`); apagar uma ficha deixa os treinos com `workout_plan_id` nulo.
+
+### 2026-10-22 — Telas do Treino e Hoje (etapa 4)
+- Rotas do módulo em `routes/training.php` (prefixo `/treino`, nomes `training.*`); núcleo em `routes/web.php`: `/hoje` (`today`), `/configuracoes` (`settings`) e `POST /sair` (`logout`).
+- Telas em `livewire/core/` (`today`, `settings`, `login`) e `livewire/training/` (`plans`, `plan-editor`, `workout`, `summary`, `history`, `exercises`, `supplements`). Leitura e escrita passam por Actions; as telas só orquestram estado.
+- As fichas ativas recebem letras pela ordem do rodízio (Ficha A, B, C...); arquivadas usam a inicial do nome. "Ficha B" no Hoje, no treino e no histórico vem dessa letra, e o nome da ficha aparece como descrição.
+- Treino em andamento: cada mudança de carga ou repetição é salva na hora, para retomar depois de fechar o app; concluir uma série dispara o `rest-timer` com o `rest_seconds` do exercício. Exercícios concluídos e futuros ficam recolhidos; o atual (primeiro com série pendente) fica aberto.
+- Recorde: a melhor série concluída do exercício no treino (mais carga, depois mais repetições) que supera todos os treinos finalizados anteriores; a primeira vez que um exercício é feito não conta como recorde. Volume = soma de carga × repetições das séries concluídas.
+- Histórico: gráfico com a maior carga de cada um dos últimos 8 treinos do exercício escolhido.
+- Componentes de estrutura adicionados ao design system: `page`, `page-header`, `action-bar`, `alert`, `section-label`; variantes de botão `outline` (Finalizar) e `inverse` (Retomar treino); componente do módulo `training/header` (título e abas da seção Treino).
+- Ajustes mostra por onde a pessoa entrou ("Conectado com Google" ou "Conectado com e-mail"): o método fica na sessão do acesso atual e em `users.last_login_method`, usado quando o "manter conectado" restaura o login numa sessão nova (Actions `Core/RecordLogin` e `Core/GetLoginMethod`).

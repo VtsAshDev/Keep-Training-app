@@ -1,4 +1,4 @@
-{{-- Screen header with back link and an optional action slot on the right. --}}
+{{-- Screen header with back link and an optional action slot on the right. The meta slot replaces subtitle. --}}
 @props([
     'title',
     'subtitle' => null,
@@ -15,8 +15,8 @@
 
     <div class="min-w-0 flex-1">
         <div class="truncate font-display text-[22px] leading-none font-semibold uppercase">{{ $title }}</div>
-        @if ($subtitle)
-            <div class="mt-0.5 text-[13px] text-ink-muted tabular-nums">{{ $subtitle }}</div>
+        @if (isset($meta) || $subtitle)
+            <div class="mt-0.5 text-[13px] text-ink-muted tabular-nums">{{ $meta ?? $subtitle }}</div>
         @endif
     </div>
 

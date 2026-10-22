@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Keep Focus'),
 
+    'version' => env('APP_VERSION', '0.1.0'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
