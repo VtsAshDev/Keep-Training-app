@@ -168,7 +168,6 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 ## Decisões em aberto
 
 - Novo domínio do Keep Focus.
-- Identidade visual: paleta, tipografia e logo.
 - Manter SQLite em produção ou migrar para MySQL/PostgreSQL antes do lançamento.
 - Lista inicial do catálogo padrão de exercícios.
 - Unidade de carga fixa em kg ou configurável por usuário.
@@ -182,3 +181,11 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - **2026-10-22** — As migrations `diet_plans` e `diet_plan_items` são mantidas no repositório, sem models nem telas. Dieta continua fora do escopo do MVP.
 - **2026-10-22** — O componente legado `components/tabs/⚡suplementacao.blade.php` fica no lugar, fora da navegação e sem rota, como referência até ser substituído pelas Actions e telas do módulo Treino.
 - **2026-10-22** — Os ícones do PWA (`public/icon-*.png`, `apple-touch-icon.png`, `favicon.svg`) são provisórios ("KF" sobre fundo escuro) até a identidade da etapa 2.
+
+### 2026-10-22 — Identidade visual
+- Sensação: energética e esportiva.
+- Cor da marca: laranja, brand-500 #FF6A00; texto sobre laranja #1A0F08 (nunca branco).
+- Neutros quentes; modo escuro com base #0F0D0C; modo segue o sistema (prefers-color-scheme).
+- Tipografia: Barlow Condensed (títulos, números grandes), Barlow (texto); números com tabular-nums; fontes via @fontsource (offline).
+- Logo: wordmark "KEEP FOCUS" em Barlow Condensed itálico, "FOCUS" em laranja. Ícone PWA: monograma "KF" sobre laranja.
+- Tokens: ver bloco @theme em resources/css/app.css; views usam tokens semânticos (bg-surface, text-ink, border-line, bg-brand-500 text-on-brand).
