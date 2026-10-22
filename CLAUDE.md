@@ -12,7 +12,8 @@ Este arquivo é a referência do projeto para escopo, convenções, modelo de da
 - Etapa 1 (Base limpa): **concluída** na branch `KT-15`.
 - Etapa 2 (Design system): **concluída** na branch `KT-16`, revisada pelo dono em `/dev/ui`.
 - Etapa 3 (Dados e regras do Treino): **concluída** na branch `KT-17`.
-- Etapa em andamento: **4. Telas do Treino e tela Hoje** na branch `KT-18`: telas prontas, aguardando revisão do dono.
+- Etapa 4 (Telas do Treino e tela Hoje): **concluída** na branch `KT-18`.
+- Etapa em andamento: **5. Migração de dados** na branch `KT-19`: migration de cópia pronta e testada; falta validar com a cópia do banco de produção.
 
 ## Stack
 
@@ -244,3 +245,10 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - Histórico: gráfico com a maior carga de cada um dos últimos 8 treinos do exercício escolhido.
 - Componentes de estrutura adicionados ao design system: `page`, `page-header`, `action-bar`, `alert`, `section-label`; variantes de botão `outline` (Finalizar) e `inverse` (Retomar treino); componente do módulo `training/header` (título e abas da seção Treino).
 - Ajustes mostra por onde a pessoa entrou ("Conectado com Google" ou "Conectado com e-mail"): o método fica na sessão do acesso atual e em `users.last_login_method`, usado quando o "manter conectado" restaura o login numa sessão nova (Actions `Core/RecordLogin` e `Core/GetLoginMethod`).
+
+### 2026-10-22 — Migração dos suplementos antigos (etapa 5)
+- A migration `2026_10_22_000007_copy_legacy_supplements` copia `suplementos` para `supplements` e `consumo_diario` para `supplement_logs`: `nome`→`name`, `quantidade_dose`→`dose`, `unidade_medida`→`unit`, `informacao_adicional_dose`→`dose_notes`, `horario_indicado`→`scheduled_time`, `observacao`→`notes`, `regra_uso` `diario`/`apenas_treino`→`daily`/`training_days` (valor desconhecido vira `daily`), `data_consumo`→`date` (meia-noite, no formato do cast), `consumido`→`taken`; datas de criação preservadas.
+- Registros de consumo feitos por outro usuário no suplemento de alguém (possíveis pelo bug antigo do toggle) não são copiados.
+- A migration não tem volta (`down` vazio): para desfazer, restaurar o backup feito antes de migrar. Ela grava no log um resumo (`Legacy supplements copied`) com o total copiado e o que foi ignorado.
+- As tabelas e models antigos (`suplementos`, `consumo_diario`, `Suplemento`, `ConsumoDiario`) continuam até a cópia ser validada com o banco de produção; depois saem numa migration própria.
+- Validação com a cópia de produção: copiar o arquivo para `/tmp` dentro do container, rodar `php artisan migrate` com `DB_DATABASE` apontando para a cópia e comparar as contagens das tabelas antigas e novas com o resumo do log.
