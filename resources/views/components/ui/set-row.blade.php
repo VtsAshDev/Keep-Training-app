@@ -29,8 +29,8 @@
         <span class="text-center font-display text-xl font-semibold tabular-nums">{{ $weight }}</span>
         <span class="text-center font-display text-xl font-semibold tabular-nums">{{ $reps }}</span>
     @else
-        <x-ui.input numeric hide-label :label="__('Weight for set :number', ['number' => $number])" inputmode="decimal" :value="$weight" :wire:model.blur="$weightModel" :muted="$muted" />
-        <x-ui.input numeric hide-label :label="__('Reps for set :number', ['number' => $number])" inputmode="numeric" :value="$reps" :wire:model.blur="$repsModel" :muted="$muted" />
+        <x-ui.input numeric hide-label :label="__('Weight for set :number', ['number' => $number])" inputmode="decimal" :value="$weight" :wire:model.live.blur="$weightModel" :muted="$muted" />
+        <x-ui.input numeric hide-label :label="__('Reps for set :number', ['number' => $number])" inputmode="numeric" :value="$reps" :wire:model.live.blur="$repsModel" :muted="$muted" />
     @endif
 
     <button

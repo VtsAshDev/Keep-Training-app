@@ -151,10 +151,11 @@ test('set row renders the done state as text', function () {
         ->assertSeeInOrder(['60 × 12', '62,5', '10']);
 });
 
+// live.blur: in Livewire 4 a plain .blur only syncs in the browser and never saves the set.
 test('set row renders inputs bound to livewire for the current set', function () {
     $this->blade('<x-ui.set-row number="2" weight="62,5" reps="12" state="current" weight-model="sets.2.weight" reps-model="sets.2.reps" action="completeSet(2)" />')
-        ->assertSee('wire:model.blur="sets.2.weight"', false)
-        ->assertSee('wire:model.blur="sets.2.reps"', false)
+        ->assertSee('wire:model.live.blur="sets.2.weight"', false)
+        ->assertSee('wire:model.live.blur="sets.2.reps"', false)
         ->assertSee('wire:click="completeSet(2)"', false)
         ->assertSee('Carga da série 2')
         ->assertSee('aria-label="Concluir série 2"', false);
