@@ -36,7 +36,7 @@ Antes de concluir qualquer tarefa, rode Pint, PHPStan e Pest e garanta que tudo 
 - Telas montadas apenas com componentes do design system (`components/ui/`). Nada de classes Tailwind longas repetidas nas views.
 - Branch por fase ou feature. Merge na `main` somente com CI verde.
 - Todo commit explica, no corpo da mensagem e de forma enxuta, tudo o que foi feito: uma linha por mudança relevante, em português, fácil de entender sem abrir o diff.
-- Em componentes Livewire de arquivo único, todo `use` fica na parte PHP da classe; nunca em `@php use` na view. O Livewire junta os dois no mesmo arquivo compilado, e o Pint (que roda nos `.blade.php` pelo lint-staged) pode criar um import duplicado e derrubar a página.
+- Em componentes Livewire de arquivo único, a view chama classes pelo nome completo (ex.: `App\Support\Dates::long(...)`), sem `use`. A parte PHP e a view viram um só arquivo compilado, e o Pint (que o lint-staged roda nos `.blade.php`) só enxerga a classe: remove imports que só a view usa e cria imports que colidem com um `@php use` da view.
 
 ## Design de referência
 

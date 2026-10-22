@@ -52,20 +52,20 @@ new class extends Component
         </span>
         <h1 class="mt-4 font-display text-[40px] leading-tight font-bold uppercase italic">{{ __('Workout completed') }}</h1>
         <p class="mt-1 text-[15px] text-ink-muted">
-            {{ collect([__('Plan :letter', ['letter' => $summary->letter]), $plan?->name, Dates::long($summary->session->started_at)])->filter()->implode(' · ') }}
+            {{ collect([__('Plan :letter', ['letter' => $summary->letter]), $plan?->name, App\Support\Dates::long($summary->session->started_at)])->filter()->implode(' · ') }}
         </p>
     </div>
 
     <div class="grid grid-cols-3 gap-2">
         <x-ui.stat boxed :label="__('Duration')" :value="$summary->durationMinutes" unit="min" />
-        <x-ui.stat boxed :label="__('Volume')" :value="Weight::format($summary->volumeKg, 0)" unit="kg" />
+        <x-ui.stat boxed :label="__('Volume')" :value="App\Support\Weight::format($summary->volumeKg, 0)" unit="kg" />
         <x-ui.stat boxed :label="__('Sets')" :value="$summary->completedSets" />
     </div>
 
     @if ($summary->records !== [])
         <x-ui.record-banner
             :title="trans_choice(':count record broken|:count records broken', count($summary->records))"
-            :records="array_map(fn ($record) => ['label' => $record->exercise->name, 'value' => Weight::format($record->weightKg).' kg × '.$record->reps], $summary->records)"
+            :records="array_map(fn ($record) => ['label' => $record->exercise->name, 'value' => App\Support\Weight::format($record->weightKg).' kg × '.$record->reps], $summary->records)"
         />
     @endif
 
@@ -74,7 +74,7 @@ new class extends Component
             @foreach ($exercises as $exercise)
                 <div class="flex min-h-11 items-center justify-between gap-3 border-b border-line text-[15px] last:border-b-0">
                     <span>{{ $exercise['name'] }}</span>
-                    <span class="text-ink-muted tabular-nums">{{ $exercise['sets'] }} × {{ Weight::format($exercise['topWeightKg']) }} kg</span>
+                    <span class="text-ink-muted tabular-nums">{{ $exercise['sets'] }} × {{ App\Support\Weight::format($exercise['topWeightKg']) }} kg</span>
                 </div>
             @endforeach
             @if ($hidden > 0)

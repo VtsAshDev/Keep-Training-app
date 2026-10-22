@@ -175,7 +175,7 @@ new class extends Component
                 @if ($exercise->suggestion && $item)
                     <div class="mt-3 flex items-center gap-2 rounded-[10px] bg-brand-soft px-3 py-2.5 text-sm text-brand-soft-ink">
                         <x-ui.icon name="arrow-up" class="size-[18px]" :stroke="2.2" />
-                        {{ __('You hit :reps reps on every set. Try :weight kg.', ['reps' => $item->reps_max, 'weight' => Weight::format($exercise->suggestion->suggestedWeightKg)]) }}
+                        {{ __('You hit :reps reps on every set. Try :weight kg.', ['reps' => $item->reps_max, 'weight' => App\Support\Weight::format($exercise->suggestion->suggestedWeightKg)]) }}
                     </div>
                 @endif
 
@@ -186,7 +186,7 @@ new class extends Component
                         <x-ui.set-row
                             wire:key="set-{{ $set->id }}"
                             :number="$set->set_number"
-                            :previous="$previous ? Weight::format($previous->weight_kg).' × '.$previous->reps : null"
+                            :previous="$previous ? App\Support\Weight::format($previous->weight_kg).' × '.$previous->reps : null"
                             :weight="$sets[$set->id]['weight'] ?? ''"
                             :reps="$sets[$set->id]['reps'] ?? ''"
                             :state="$set->completed ? 'done' : ($set->id === $firstPending ? 'current' : 'pending')"

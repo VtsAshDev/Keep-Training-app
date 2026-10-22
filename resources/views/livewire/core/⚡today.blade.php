@@ -64,7 +64,7 @@ new class extends Component
     <x-slot:header>
         <header class="flex items-center justify-between px-5 pt-[max(1.5rem,env(safe-area-inset-top))]">
             <x-ui.logo size="sm" />
-            <span class="text-sm text-ink-muted">{{ Dates::long(now()) }}</span>
+            <span class="text-sm text-ink-muted">{{ App\Support\Dates::long(now()) }}</span>
         </header>
     </x-slot>
 
@@ -95,7 +95,7 @@ new class extends Component
             </div>
             @if ($training->lastWorkout)
                 <div class="mt-3 text-[13px] text-ink-muted">
-                    {{ __('Last workout: Plan :letter, :day', ['letter' => $training->lastWorkoutLetter, 'day' => Dates::relative($training->lastWorkout->started_at)]) }}
+                    {{ __('Last workout: Plan :letter, :day', ['letter' => $training->lastWorkoutLetter, 'day' => App\Support\Dates::relative($training->lastWorkout->started_at)]) }}
                 </div>
             @endif
         </x-ui.card>

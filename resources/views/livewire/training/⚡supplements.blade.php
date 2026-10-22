@@ -124,7 +124,7 @@ new class extends Component
                 wire:key="supplement-{{ $supplement->id }}"
                 class="min-h-17"
                 :title="$supplement->name"
-                :subtitle="collect([Weight::format($supplement->dose).' '.$supplement->unit, $supplement->scheduled_time, $supplement->dose_notes])->filter()->implode(' · ')"
+                :subtitle="collect([App\Support\Weight::format($supplement->dose).' '.$supplement->unit, $supplement->scheduled_time, $supplement->dose_notes])->filter()->implode(' · ')"
             >
                 <x-slot:trailing>
                     <button type="button" wire:click="edit({{ $supplement->id }})" aria-label="{{ __('Edit :name', ['name' => $supplement->name]) }}" class="grid size-11 place-items-center rounded-xl text-ink-muted hover:bg-surface-2">

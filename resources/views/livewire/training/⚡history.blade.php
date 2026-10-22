@@ -47,14 +47,14 @@ new class extends Component
             </x-ui.select>
 
             <div class="mt-3.5 flex flex-wrap gap-5">
-                <x-ui.stat :label="__('Current')" :value="Weight::format($progress->currentKg)" unit="kg" />
+                <x-ui.stat :label="__('Current')" :value="App\Support\Weight::format($progress->currentKg)" unit="kg" />
                 @if ($progress->record)
-                    <x-ui.stat :label="__('Record')" :value="Weight::format($progress->record->weightKg)" :unit="'× '.$progress->record->reps" accent />
+                    <x-ui.stat :label="__('Record')" :value="App\Support\Weight::format($progress->record->weightKg)" :unit="'× '.$progress->record->reps" accent />
                 @endif
                 @if ($progress->deltaKg !== null)
                     <x-ui.stat
                         :label="trans_choice(':count workout|:count workouts', count($progress->points))"
-                        :value="($progress->deltaKg > 0 ? '+' : '').Weight::format($progress->deltaKg)"
+                        :value="($progress->deltaKg > 0 ? '+' : '').App\Support\Weight::format($progress->deltaKg)"
                         unit="kg"
                     />
                 @endif
@@ -67,8 +67,8 @@ new class extends Component
                     :labels="[$progress->firstDate?->locale(app()->getLocale())->isoFormat('D MMM'), $progress->lastDate?->locale(app()->getLocale())->isoFormat('D MMM')]"
                     :label="__('Load of :exercise went from :from kg to :to kg in the last :count workouts', [
                         'exercise' => $progress->exercise->name,
-                        'from' => Weight::format($progress->points[0]),
-                        'to' => Weight::format($progress->points[count($progress->points) - 1]),
+                        'from' => App\Support\Weight::format($progress->points[0]),
+                        'to' => App\Support\Weight::format($progress->points[count($progress->points) - 1]),
                         'count' => count($progress->points),
                     ])"
                 />
@@ -88,10 +88,10 @@ new class extends Component
                 :href="route('training.summary', $workout->session->id)"
                 wire:navigate
                 :letter="$workout->letter"
-                :title="Dates::long($workout->session->started_at)"
+                :title="App\Support\Dates::long($workout->session->started_at)"
                 :subtitle="collect([
                     $workout->durationMinutes.' min',
-                    Weight::format($workout->volumeKg, 0).' kg',
+                    App\Support\Weight::format($workout->volumeKg, 0).' kg',
                     $workout->records > 0 ? trans_choice(':count record|:count records', $workout->records) : null,
                 ])->filter()->implode(' · ')"
             />

@@ -45,7 +45,7 @@ new class extends Component
         ? __('Next in rotation')
         : collect([
             trans_choice(':count exercise|:count exercises', $item->exerciseCount),
-            $item->lastDoneAt ? Dates::relative($item->lastDoneAt) : null,
+            $item->lastDoneAt ? App\Support\Dates::relative($item->lastDoneAt) : null,
         ])->filter()->implode(' · ');
 @endphp
 
