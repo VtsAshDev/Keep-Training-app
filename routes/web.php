@@ -9,7 +9,7 @@ Route::view('/', 'welcome')->middleware('guest')->name('home');
 
 Route::redirect('/login', '/')->name('login');
 
-Route::view('/intern', 'intern')->middleware('auth')->name('intern');
+Route::livewire('/hoje', 'core.today')->middleware('auth')->name('today');
 
 Route::get('/auth/google', function () {
     return Socialite::driver('google')->redirect();
@@ -28,5 +28,5 @@ Route::get('/auth/google/callback', function () {
     Auth::login($user, remember: true);
     session()->regenerate();
 
-    return redirect()->intended(route('intern'));
+    return redirect()->intended(route('today'));
 });
