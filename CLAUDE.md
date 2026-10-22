@@ -10,8 +10,8 @@ Este arquivo é a referência do projeto para escopo, convenções, modelo de da
 
 - Branches seguem o padrão do hook `commit-msg` (`KT-<n>`, ex.: `KT-15`); commits no formato `KT-<n>: [TIPO]:Descrição`. A `main` e a VPS continuam rodando o Keep Training até a etapa 6.
 - Etapa 1 (Base limpa): **concluída** na branch `KT-15`.
-- Etapa em andamento: **2. Design system** (ver "Plano de transição" e a decisão de identidade visual).
-- Design system alinhado ao design de referência na branch `KT-16`; falta a revisão visual do dono em `/dev/ui` para concluir a etapa 2.
+- Etapa 2 (Design system): **concluída** na branch `KT-16`, revisada pelo dono em `/dev/ui`.
+- Etapa em andamento: **3. Dados e regras do Treino** na branch `KT-17`: migrations, models, Enums, Actions e testes prontos, aguardando revisão do dono.
 
 ## Stack
 
@@ -152,7 +152,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 
 1. **Base limpa** — backup do SQLite da VPS (feito manualmente pelo dono); criar branch `KT-15`; remover views, app.css, ícones, abas placeholder e `testing_test_2`; atualizar APP_NAME, composer.json, manifest.json e locale pt_BR; app rodando com login Google e uma tela `/hoje` vazia.
 2. **Design system** — tokens no `@theme` do Tailwind com modo claro e escuro; fontes e ícones; todos os componentes listados em `docs/design/README.md` (básicos e específicos); página `/dev/ui` (só local) com todos os componentes.
-3. **Dados e regras do Treino** — migrations, models e Enums; seeder do catálogo padrão; Actions: próxima ficha, iniciar e finalizar treino, registrar série, pré-preenchimento, progressão, meta semanal, toggle de suplemento; testes Pest de todas as regras de borda.
+3. **Dados e regras do Treino** — migrations, models e Enums; catálogo padrão adiado (ver decisões); Actions: próxima ficha, iniciar e finalizar treino, registrar série, pré-preenchimento, progressão, meta semanal, toggle de suplemento; testes Pest de todas as regras de borda.
 4. **Telas do Treino e tela Hoje** — exercícios, fichas e edição; treino em andamento com timer e resumo; suplementos e histórico; tela Hoje e configurações.
 5. **Migração de dados** — migration que copia `suplementos` e `consumo_diario` para `supplements` e `supplement_logs`; validar com cópia do banco de produção.
 6. **Infraestrutura e lançamento** — domínio, DNS, Nginx, SSL; callback no Google Cloud Console; `.env` da VPS e versão de cache do `sw.js`; renomear repositório; merge na main, deploy, reinstalar o PWA.
@@ -176,8 +176,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 
 - Novo domínio do Keep Focus.
 - Manter SQLite em produção ou migrar para MySQL/PostgreSQL antes do lançamento.
-- Lista inicial do catálogo padrão de exercícios.
-- Unidade de carga fixa em kg ou configurável por usuário (a linha em Configurações depende disso).
+- API externa para o catálogo padrão de exercícios.
 
 ## Decisões tomadas
 
@@ -189,6 +188,9 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - **2026-10-22** — O componente legado `components/tabs/⚡suplementacao.blade.php` fica no lugar, fora da navegação e sem rota, como referência até ser substituído pelas Actions e telas do módulo Treino.
 - **2026-10-22** — Os ícones do PWA foram provisórios na etapa 1; agora são o monograma "KF" em `public/icons/`, conforme a identidade visual.
 - **2026-10-22** — Todo commit traz no corpo um resumo enxuto de tudo o que foi feito (ver "Convenções").
+- **2026-10-22** — Catálogo de exercícios: por enquanto não há catálogo padrão; o usuário cadastra os próprios exercícios. `exercises.user_id` continua aceitando nulo para receber depois um catálogo vindo de uma API externa.
+- **2026-10-22** — Unidade de carga fixa em kg (`weight_kg`); a linha "Unidade de carga" em Ajustes é só informativa.
+- **2026-10-22** — Timezone da aplicação `America/Sao_Paulo` (`APP_TIMEZONE`): define a data do dia de treino, dos registros de suplemento e a semana de segunda a domingo.
 
 ### 2026-10-22 — Identidade visual
 - Sensação: energética e esportiva.
@@ -212,10 +214,21 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - Timer de descanso em barra fixa no rodapé do treino, com −15 s, +15 s e Pular; inicia ao concluir uma série, com o `rest_seconds` do exercício.
 - Áreas tocáveis com no mínimo 44 px; botões principais com 52 px.
 
-### 2026-10-22 — Implementação do design system (etapa 2)
+### 2026-10-22 — Implementação do design system (etapa 2, aprovada pelo dono)
 - Tokens semânticos extras, além dos da identidade: `brand-soft` / `brand-soft-ink` (fundo e texto das etiquetas, do aviso de progressão e do banner de recordes: `#FFE4CF`/`#963C06` no claro, `#3A2312`/`#FFC79E` no escuro) e `danger`.
 - Barlow Condensed usada em 600 nos títulos e números, como nas telas (a identidade cita 500; o peso 500 também está instalado), e 700 itálico no logo. Barlow em 400, 500 e 600.
 - O "FOCUS" do logo usa `brand-text`, como diz a identidade (as telas mostram `#FF6A00`/`#E85A00`).
 - Componentes auxiliares além da lista do README: `icon` (ícones SVG por nome), `checkbox-box` (caixa compartilhada por `checkbox` e `supplement-item`), `set-table` (cabeçalho Série/Anterior/kg/Reps) e `monogram` (quadrado "KF" da entrada).
 - Interação no cliente com Alpine (já vem com o Livewire): `stepper` liga com `wire:model` via `x-modelable`; `rest-timer` começa com o evento `rest-timer-start` e conta pelo horário de término, para não atrasar com a tela apagada.
 - A tela de entrada mostra "Entrar com Google" como ação principal; o login por e-mail abre em "Entrar com e-mail".
+
+### 2026-10-22 — Regras do Treino implementadas (etapa 3)
+- Actions em `app/Actions/Training/`, todas recebendo o `User` e buscando os registros pelas relações dele (id de outro usuário dá 404): `GetNextWorkoutPlan`, `GetActiveWorkoutSession`, `StartWorkoutSession`, `RecordWorkoutSet`, `FinishWorkoutSession`, `GetPreviousSets`, `GetProgressionSuggestion`, `IsTrainingDay`, `GetWeeklyGoalProgress`, `GetTodaySupplements` e `ToggleSupplementLog`. As que o Hoje usa são `GetNextWorkoutPlan`, `GetActiveWorkoutSession`, `GetWeeklyGoalProgress` e `GetTodaySupplements`.
+- Regra de negócio violada lança `App\Exceptions\Training\TrainingRuleException`, com mensagem em pt_BR para mostrar ao usuário (treino já em andamento, treino já finalizado, ficha arquivada, suplemento de dia de treino antes de iniciar o treino).
+- Objetos de retorno em `app/Data/Training/` (`WeeklyGoalProgress`, `TodaySupplement`, `ProgressionSuggestion`).
+- Rodízio: empate de `position` desempata pelo `id`.
+- Pré-preenchimento: usa só séries concluídas do último treino finalizado com o exercício (em qualquer ficha); séries a mais na ficha repetem a última feita; sem histórico, a série vem vazia.
+- Progressão dupla: sugere +2,5 kg sobre a maior carga do último treino quando todas as séries planejadas foram feitas e todas atingiram `reps_max`.
+- Meta semanal: conta treinos finalizados pela data de início; semanas passadas são avaliadas com a meta atual do usuário (não há histórico de metas).
+- `supplement_logs.date` é gravado como timestamp à meia-noite (cast `date`); consultas por dia usam `whereDate`.
+- Exclusões: apagar um exercício usado em ficha ou histórico é bloqueado (`restrictOnDelete`); apagar uma ficha deixa os treinos com `workout_plan_id` nulo.
