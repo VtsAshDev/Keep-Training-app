@@ -1,3 +1,78 @@
+@import "@fontsource/barlow/latin-400.css";
+@import "@fontsource/barlow/latin-500.css";
+@import "@fontsource/barlow/latin-600.css";
+@import "@fontsource/barlow/latin-700.css";
+@import "@fontsource/barlow-condensed/latin-600.css";
+@import "@fontsource/barlow-condensed/latin-700.css";
+@import "@fontsource/barlow-condensed/latin-700-italic.css";
 @import "tailwindcss";
 
 @source '../views';
+
+/*
+ * Semantic colors keep light and dark values side by side in light-dark().
+ * The mode follows the system through color-scheme; data-theme forces one
+ * mode on a subtree.
+ */
+@theme {
+    --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+    --font-display:
+        "Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
+
+    --color-brand-50: #fff4eb;
+    --color-brand-100: #ffe4cc;
+    --color-brand-200: #ffc799;
+    --color-brand-300: #ffa25c;
+    --color-brand-400: #ff8329;
+    --color-brand-500: #ff6a00;
+    --color-brand-600: #e05a00;
+    --color-brand-700: #b84800;
+    --color-brand-800: #8f3800;
+    --color-brand-900: #6b2a00;
+    --color-brand-950: #3d1700;
+    --color-on-brand: #1a0f08;
+}
+
+@theme inline {
+    --color-surface: var(--surface);
+    --color-surface-raised: var(--surface-raised);
+    --color-surface-muted: var(--surface-muted);
+    --color-ink: var(--ink);
+    --color-ink-muted: var(--ink-muted);
+    --color-line: var(--line);
+    --color-accent: var(--accent);
+    --color-danger: var(--danger);
+    --color-success: var(--success);
+}
+
+@layer base {
+    :root {
+        color-scheme: light dark;
+    }
+
+    /* Redeclared on every [data-theme] so the subtree resolves its own mode. */
+    :root,
+    [data-theme] {
+        --surface: light-dark(#f7f4f1, #0f0d0c);
+        --surface-raised: light-dark(#ffffff, #1a1614);
+        --surface-muted: light-dark(#efe9e3, #26201c);
+        --ink: light-dark(#1c1714, #f5f0eb);
+        --ink-muted: light-dark(#6b615a, #a89d94);
+        --line: light-dark(#e3dcd5, #362e29);
+        --accent: light-dark(#b84800, #ff8329);
+        --danger: light-dark(#c62828, #f87171);
+        --success: light-dark(#2e7d32, #4ade80);
+    }
+
+    [data-theme="light"] {
+        color-scheme: light;
+    }
+
+    [data-theme="dark"] {
+        color-scheme: dark;
+    }
+
+    body {
+        @apply bg-surface font-sans text-ink antialiased;
+    }
+}

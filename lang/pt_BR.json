@@ -1,10 +1,15 @@
 {
+    "Close": "Fechar",
     "Email": "E-mail",
     "Log in": "Entrar",
+    "Main navigation": "Navegação principal",
     "Password": "Senha",
     "Remember me": "Manter conectado",
+    "Settings": "Configurações",
     "Sign in with Google": "Entrar com Google",
     "These credentials do not match our records.": "As credenciais fornecidas estão incorretas.",
     "Today": "Hoje",
-    "Too many login attempts. Please try again in :seconds seconds.": "Muitas tentativas de login. Tente novamente em :seconds segundos."
+    "Too many login attempts. Please try again in :seconds seconds.": "Muitas tentativas de login. Tente novamente em :seconds segundos.",
+    "Training": "Treino",
+    "Your training, supplements and weekly goal in one place.": "Seu treino, suplementos e meta semanal em um só lugar."
 }

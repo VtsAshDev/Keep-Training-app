@@ -9,7 +9,7 @@ Este arquivo é a referência do projeto para escopo, convenções, modelo de da
 ## Status atual
 
 - Branches seguem o padrão do hook `commit-msg` (`KT-<n>`, ex.: `KT-15`); commits no formato `KT-<n>: [TIPO]:Descrição`. A `main` e a VPS continuam rodando o Keep Training até a etapa 6.
-- Etapa em andamento: **1. Base limpa** (ver "Plano de transição").
+- Etapa em andamento: **2. Design system** (ver "Plano de transição").
 
 ## Stack
 
@@ -181,8 +181,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - **2026-10-22** — O login por e-mail e senha (componente `core.login`) é mantido, ao lado do login Google.
 - **2026-10-22** — As migrations `diet_plans` e `diet_plan_items` são mantidas no repositório, sem models nem telas. Dieta continua fora do escopo do MVP.
 - **2026-10-22** — O componente legado `components/tabs/⚡suplementacao.blade.php` fica no lugar, fora da navegação e sem rota, como referência até ser substituído pelas Actions e telas do módulo Treino.
-- **2026-10-22** — Os ícones do PWA (`public/icon-*.png`, `apple-touch-icon.png`, `favicon.svg`) são provisórios ("KF" sobre fundo escuro) até a identidade da etapa 2.
-
+- **2026-10-22** — Os ícones do PWA (`public/icon-*.png`, `apple-touch-icon.png`, `favicon.svg`) foram provisórios até a etapa 2; agora são o monograma "KF" (Barlow Condensed Bold Italic, #1A0F08 sobre #FF6A00).
 - **2026-10-22** — Todo commit traz no corpo um resumo enxuto de tudo o que foi feito (ver "Convenções").
 
 ### 2026-10-22 — Identidade visual
@@ -192,3 +191,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - Tipografia: Barlow Condensed (títulos, números grandes), Barlow (texto); números com tabular-nums; fontes via @fontsource (offline).
 - Logo: wordmark "KEEP FOCUS" em Barlow Condensed itálico, "FOCUS" em laranja. Ícone PWA: monograma "KF" sobre laranja.
 - Tokens: ver bloco @theme em resources/css/app.css; views usam tokens semânticos (bg-surface, text-ink, border-line, bg-brand-500 text-on-brand).
+- Implementação (etapa 2): cores semânticas (`surface`, `surface-raised`, `surface-muted`, `ink`, `ink-muted`, `line`, `accent`, `danger`, `success`) definidas com `light-dark()` em `:root, [data-theme]` e expostas via `@theme inline`; `data-theme="light|dark"` força um modo num trecho da página (usado em `/dev/ui`). Evitar a variante `dark:` do Tailwind: os tokens já trocam sozinhos.
+- `accent` (#B84800 claro / #FF8329 escuro) é o laranja para texto e ícones ativos sobre superfícies; `brand-500` puro só em fundos (com `text-on-brand`) e no logo.
+- Fontes: só o subset `latin` (cobre português) nos pesos Barlow 400–700 e Barlow Condensed 600, 700 e 700 itálico.
+- Componentes em `resources/views/components/ui/`: `button` (primary, secondary, ghost; sm, md, lg; `href` vira link), `input`, `checkbox`, `card` (slot `actions`), `modal` (`<dialog>` aberto por `open-modal`/`close-modal` com o nome), `bottom-nav` (Hoje, Treino, Configurações) e `logo`. Vitrine em `/dev/ui`, registrada só quando `APP_ENV=local`.
