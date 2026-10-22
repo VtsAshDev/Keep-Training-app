@@ -1,6 +1,8 @@
 {{--
     Open with $dispatch('open-modal', 'name') in Alpine or
     $this->dispatch('open-modal', name: 'name') in Livewire; close with 'close-modal'.
+    wire:ignore.self keeps Livewire updates from removing the "open" attribute (which closed
+    the modal on every search or validation error) while the content still updates.
 --}}
 @props([
     'name',
@@ -8,6 +10,7 @@
 ])
 
 <dialog
+    wire:ignore.self
     x-data="{ matches: (event) => (event.detail?.name ?? event.detail) === @js($name) }"
     x-on:open-modal.window="matches($event) && $el.showModal()"
     x-on:close-modal.window="matches($event) && $el.close()"

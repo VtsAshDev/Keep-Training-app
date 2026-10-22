@@ -13,8 +13,8 @@ Este arquivo é a referência do projeto para escopo, convenções, modelo de da
 - Etapa 2 (Design system): **concluída** na branch `KT-16`, revisada pelo dono em `/dev/ui`.
 - Etapa 3 (Dados e regras do Treino): **concluída** na branch `KT-17`.
 - Etapa 4 (Telas do Treino e tela Hoje): **concluída** na branch `KT-18`.
-- Etapa 5 (Migração de dados): migration de cópia pronta e testada na branch `KT-19`; **falta validar com a cópia do banco de produção**.
-- Etapa em andamento: **6. Infraestrutura e lançamento** na branch `KT-20`: código pronto (service worker, página offline, backup no deploy); passos do dono em `docs/deploy.md`.
+- Etapa 5 (Migração de dados): **concluída** na branch `KT-19`, validada em 2026-10-22 com a cópia do banco de produção (8 suplementos e 12 registros copiados, nenhum ignorado).
+- Etapa em andamento: **6. Infraestrutura e lançamento** na branch `KT-20`: código pronto (service worker, página offline, backup no deploy, scripts de lançamento). Os passos na VPS, DNS e Google Cloud Console ficaram para depois; até lá a produção continua no Keep Training. Roteiro em `docs/deploy.md`.
 
 ## Stack
 
@@ -194,6 +194,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - **2026-10-22** — Catálogo de exercícios: por enquanto não há catálogo padrão; o usuário cadastra os próprios exercícios. `exercises.user_id` continua aceitando nulo para receber depois um catálogo vindo de uma API externa.
 - **2026-10-22** — Unidade de carga fixa em kg (`weight_kg`); a linha "Unidade de carga" em Ajustes é só informativa.
 - **2026-10-22** — Domínio do Keep Focus: `keep-focus.luvcode.tech`. Roteiro de lançamento em `docs/deploy.md`.
+- **2026-10-22** — Mensagens de validação em português em `lang/pt_BR/validation.php`, com nomes amigáveis para os campos dos formulários (`attributes`); regras não traduzidas caem no inglês do framework.
 - **2026-10-22** — Timezone da aplicação `America/Sao_Paulo` (`APP_TIMEZONE`): define a data do dia de treino, dos registros de suplemento e a semana de segunda a domingo.
 
 ### 2026-10-22 — Identidade visual
@@ -251,7 +252,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - A migration `2026_10_22_000007_copy_legacy_supplements` copia `suplementos` para `supplements` e `consumo_diario` para `supplement_logs`: `nome`→`name`, `quantidade_dose`→`dose`, `unidade_medida`→`unit`, `informacao_adicional_dose`→`dose_notes`, `horario_indicado`→`scheduled_time`, `observacao`→`notes`, `regra_uso` `diario`/`apenas_treino`→`daily`/`training_days` (valor desconhecido vira `daily`), `data_consumo`→`date` (meia-noite, no formato do cast), `consumido`→`taken`; datas de criação preservadas.
 - Registros de consumo feitos por outro usuário no suplemento de alguém (possíveis pelo bug antigo do toggle) não são copiados.
 - A migration não tem volta (`down` vazio): para desfazer, restaurar o backup feito antes de migrar. Ela grava no log um resumo (`Legacy supplements copied`) com o total copiado e o que foi ignorado.
-- As tabelas e models antigos (`suplementos`, `consumo_diario`, `Suplemento`, `ConsumoDiario`) continuam até a cópia ser validada com o banco de produção; depois saem numa migration própria.
+- As tabelas e models antigos (`suplementos`, `consumo_diario`, `Suplemento`, `ConsumoDiario`) continuam no lançamento e saem numa migration própria numa versão seguinte, depois de conferir em produção que os suplementos aparecem para todos.
 - Validação com a cópia de produção: copiar o arquivo para `/tmp` dentro do container, rodar `php artisan migrate` com `DB_DATABASE` apontando para a cópia e comparar as contagens das tabelas antigas e novas com o resumo do log.
 
 ### 2026-10-22 — PWA e deploy (etapa 6)
