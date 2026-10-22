@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Core\LoginMethod;
 use App\Models\Training\Exercise;
 use App\Models\Training\Supplement;
 use App\Models\Training\SupplementLog;
@@ -25,16 +26,26 @@ use Illuminate\Support\Str;
  * @property Carbon|null $email_verified_at
  * @property string $password
  * @property int $weekly_workout_goal
+ * @property LoginMethod|null $last_login_method
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['name', 'email', 'password', 'weekly_workout_goal'])]
+#[Fillable(['name', 'email', 'password', 'weekly_workout_goal', 'last_login_method'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    /**
+     * Mirrors the column default, so new models have it before being reloaded.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'weekly_workout_goal' => 4,
+    ];
 
     /**
      * Get the attributes that should be cast.
@@ -47,6 +58,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'weekly_workout_goal' => 'integer',
+            'last_login_method' => LoginMethod::class,
         ];
     }
 

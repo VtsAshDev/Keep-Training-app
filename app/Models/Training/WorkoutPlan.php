@@ -51,6 +51,12 @@ class WorkoutPlan extends Model
         return $this->hasMany(WorkoutPlanExercise::class)->orderBy('position');
     }
 
+    /** @return HasMany<WorkoutSession, $this> */
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(WorkoutSession::class);
+    }
+
     /** @param  Builder<WorkoutPlan>  $query */
     public function scopeActive(Builder $query): void
     {

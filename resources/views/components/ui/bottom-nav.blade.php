@@ -3,10 +3,12 @@
 ])
 
 @php
+    // Livewire updates hit /livewire/update, so match against the page path.
+    $path = trim(Livewire\Livewire::originalPath(), '/');
     $items = [
-        ['label' => __('Today'), 'href' => url('/hoje'), 'active' => request()->is('hoje'), 'icon' => 'home'],
-        ['label' => __('Training'), 'href' => url('/treino/fichas'), 'active' => request()->is('treino*'), 'icon' => 'training'],
-        ['label' => __('Settings'), 'href' => url('/configuracoes'), 'active' => request()->is('configuracoes*'), 'icon' => 'settings'],
+        ['label' => __('Today'), 'href' => url('/hoje'), 'active' => $path === 'hoje', 'icon' => 'home'],
+        ['label' => __('Training'), 'href' => url('/treino/fichas'), 'active' => Str::startsWith($path, 'treino'), 'icon' => 'training'],
+        ['label' => __('Settings'), 'href' => url('/configuracoes'), 'active' => Str::startsWith($path, 'configuracoes'), 'icon' => 'settings'],
     ];
 @endphp
 
@@ -22,6 +24,7 @@
             <li class="flex-1">
                 <a
                     href="{{ $item['href'] }}"
+                    wire:navigate
                     @if ($item['active']) aria-current="page" @endif
                     @class([
                         'flex flex-col items-center gap-0.75 py-2 text-xs transition',

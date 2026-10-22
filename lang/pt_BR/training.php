@@ -38,5 +38,6 @@ return [
         'session_not_in_progress' => 'Este treino já foi finalizado.',
         'plan_archived' => 'Esta ficha está arquivada.',
         'supplement_unavailable' => 'Este suplemento só pode ser marcado depois de iniciar o treino do dia.',
+        'exercise_in_use' => 'Este exercício está em uma ficha ou no histórico e não pode ser excluído.',
     ],
 ];

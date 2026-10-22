@@ -28,4 +28,9 @@ class TrainingRuleException extends DomainException
     {
         return new self(__('training.errors.supplement_unavailable'));
     }
+
+    public static function exerciseInUse(): self
+    {
+        return new self(__('training.errors.exercise_in_use'));
+    }
 }

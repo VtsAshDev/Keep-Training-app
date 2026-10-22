@@ -1,5 +1,8 @@
 <?php
 
+use App\Actions\Core\RecordLogin;
+use App\Enums\Core\LoginMethod;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -35,6 +38,10 @@ new class extends Component
             RateLimiter::clear($throttleKey);
 
             session()->regenerate();
+
+            /** @var User $user */
+            $user = Auth::user();
+            app(RecordLogin::class)->handle($user, LoginMethod::Email);
 
             return redirect()->intended(route('today'));
         }

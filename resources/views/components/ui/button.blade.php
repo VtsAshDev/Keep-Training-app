@@ -21,6 +21,8 @@
             'secondary' => 'border border-line text-ink font-medium hover:bg-surface-2',
             'ghost' => 'text-ink font-medium hover:bg-surface-2',
             'add' => 'w-full rounded-[14px] border border-dashed border-line text-brand-text hover:bg-surface-2',
+            'outline' => 'border border-brand-500 text-brand-text hover:bg-brand-soft',
+            'inverse' => 'bg-on-brand text-brand-400 hover:opacity-90',
             default => 'bg-brand-500 text-on-brand hover:bg-brand-600',
         },
     ];

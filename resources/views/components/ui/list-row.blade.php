@@ -27,7 +27,7 @@
     ]) }}
 >
     @if ($handle)
-        <span class="flex w-8 shrink-0 cursor-grab justify-center text-ink-muted" aria-hidden="true">
+        <span x-data x-on:click.prevent x-sort:handle class="flex w-8 shrink-0 cursor-grab touch-none justify-center self-stretch items-center text-ink-muted" aria-hidden="true">
             <x-ui.icon name="grip" />
         </span>
     @endif
