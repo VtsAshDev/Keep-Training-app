@@ -9,7 +9,9 @@ Este arquivo é a referência do projeto para escopo, convenções, modelo de da
 ## Status atual
 
 - Branches seguem o padrão do hook `commit-msg` (`KT-<n>`, ex.: `KT-15`); commits no formato `KT-<n>: [TIPO]:Descrição`. A `main` e a VPS continuam rodando o Keep Training até a etapa 6.
-- Etapa em andamento: **1. Base limpa** (ver "Plano de transição").
+- Etapa 1 (Base limpa): **concluída** na branch `KT-15`.
+- Etapa em andamento: **2. Design system** (ver "Plano de transição" e a decisão de identidade visual).
+- Design system alinhado ao design de referência na branch `KT-16`; falta a revisão visual do dono em `/dev/ui` para concluir a etapa 2.
 
 ## Stack
 
@@ -32,6 +34,11 @@ Antes de concluir qualquer tarefa, rode Pint, PHPStan e Pest e garanta que tudo 
 - Toda Action tem teste em Pest. Regras de borda (rodízio, dia de treino, progressão, meta semanal) têm testes dedicados.
 - Telas montadas apenas com componentes do design system (`components/ui/`). Nada de classes Tailwind longas repetidas nas views.
 - Branch por fase ou feature. Merge na `main` somente com CI verde.
+- Todo commit explica, no corpo da mensagem e de forma enxuta, tudo o que foi feito: uma linha por mudança relevante, em português, fácil de entender sem abrir o diff.
+
+## Design de referência
+
+As telas aprovadas ficam em `docs/design/`. Antes de criar ou alterar qualquer componente ou tela, leia `docs/design/README.md` e o HTML da tela correspondente em `docs/design/telas/`. Reproduza layout, hierarquia e textos usando os componentes de `components/ui/` e os tokens semânticos; nunca copie os estilos inline nem cores em hex dessas telas. A lista de componentes exigidos pelas telas está no README do design e faz parte da Etapa 2.
 
 ## Arquitetura por módulos
 
@@ -144,7 +151,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 ## Plano de transição
 
 1. **Base limpa** — backup do SQLite da VPS (feito manualmente pelo dono); criar branch `KT-15`; remover views, app.css, ícones, abas placeholder e `testing_test_2`; atualizar APP_NAME, composer.json, manifest.json e locale pt_BR; app rodando com login Google e uma tela `/hoje` vazia.
-2. **Design system** — logo, paleta e tipografia; tokens no `@theme` do Tailwind com modo claro e escuro; componentes Blade: button, input, card, modal, checkbox, navegação.
+2. **Design system** — tokens no `@theme` do Tailwind com modo claro e escuro; fontes e ícones; todos os componentes listados em `docs/design/README.md` (básicos e específicos); página `/dev/ui` (só local) com todos os componentes.
 3. **Dados e regras do Treino** — migrations, models e Enums; seeder do catálogo padrão; Actions: próxima ficha, iniciar e finalizar treino, registrar série, pré-preenchimento, progressão, meta semanal, toggle de suplemento; testes Pest de todas as regras de borda.
 4. **Telas do Treino e tela Hoje** — exercícios, fichas e edição; treino em andamento com timer e resumo; suplementos e histórico; tela Hoje e configurações.
 5. **Migração de dados** — migration que copia `suplementos` e `consumo_diario` para `supplements` e `supplement_logs`; validar com cópia do banco de produção.
@@ -170,7 +177,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - Novo domínio do Keep Focus.
 - Manter SQLite em produção ou migrar para MySQL/PostgreSQL antes do lançamento.
 - Lista inicial do catálogo padrão de exercícios.
-- Unidade de carga fixa em kg ou configurável por usuário.
+- Unidade de carga fixa em kg ou configurável por usuário (a linha em Configurações depende disso).
 
 ## Decisões tomadas
 
@@ -180,12 +187,35 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - **2026-10-22** — O login por e-mail e senha (componente `core.login`) é mantido, ao lado do login Google.
 - **2026-10-22** — As migrations `diet_plans` e `diet_plan_items` são mantidas no repositório, sem models nem telas. Dieta continua fora do escopo do MVP.
 - **2026-10-22** — O componente legado `components/tabs/⚡suplementacao.blade.php` fica no lugar, fora da navegação e sem rota, como referência até ser substituído pelas Actions e telas do módulo Treino.
-- **2026-10-22** — Os ícones do PWA (`public/icon-*.png`, `apple-touch-icon.png`, `favicon.svg`) são provisórios ("KF" sobre fundo escuro) até a identidade da etapa 2.
+- **2026-10-22** — Os ícones do PWA foram provisórios na etapa 1; agora são o monograma "KF" em `public/icons/`, conforme a identidade visual.
+- **2026-10-22** — Todo commit traz no corpo um resumo enxuto de tudo o que foi feito (ver "Convenções").
 
 ### 2026-10-22 — Identidade visual
 - Sensação: energética e esportiva.
-- Cor da marca: laranja, brand-500 #FF6A00; texto sobre laranja #1A0F08 (nunca branco).
-- Neutros quentes; modo escuro com base #0F0D0C; modo segue o sistema (prefers-color-scheme).
-- Tipografia: Barlow Condensed (títulos, números grandes), Barlow (texto); números com tabular-nums; fontes via @fontsource (offline).
-- Logo: wordmark "KEEP FOCUS" em Barlow Condensed itálico, "FOCUS" em laranja. Ícone PWA: monograma "KF" sobre laranja.
-- Tokens: ver bloco @theme em resources/css/app.css; views usam tokens semânticos (bg-surface, text-ink, border-line, bg-brand-500 text-on-brand).
+- Cor da marca: laranja, brand-500 `#FF6A00`; texto sobre laranja `#1A0F08` (nunca branco, por contraste).
+- Escala brand: 50 `#FFF4EC`, 100 `#FFE4CF`, 200 `#FFC79E`, 300 `#FFA463`, 400 `#FF8533`, 500 `#FF6A00`, 600 `#E85A00`, 700 `#C04A00`, 800 `#963C06`, 900 `#74300A`.
+- Laranja usado como cor de texto: `#C04A00` no modo claro, `#FFA463` no escuro (token `brand-text`).
+- Neutros quentes. Claro: bg `#FAF8F6`, surface `#FFFFFF`, surface-2 `#F3EFEC`, line `#E5DFDA`, ink `#1A1412`, ink-muted `#6B625C`. Escuro: bg `#0F0D0C`, surface `#1A1716`, surface-2 `#241F1D`, line `#332C29`, ink `#F5F1EE`, ink-muted `#A8A09B`.
+- Modo claro/escuro segue o sistema (`prefers-color-scheme`); sem toggle no MVP.
+- Tipografia: Barlow Condensed 500 (títulos, nomes de fichas, números grandes como timer e cargas) e Barlow 400/500 (texto). Números de carga, repetições e timer com `tabular-nums`. Fontes instaladas via `@fontsource/barlow` e `@fontsource/barlow-condensed` (funcionam offline no PWA); não usar Google Fonts CDN.
+- Logo: wordmark "KEEP FOCUS" em Barlow Condensed itálico, "FOCUS" na cor `brand-text`; implementar como componente Blade `<x-ui.logo />` com texto (não imagem).
+- Ícone do PWA: monograma "KF" itálico escuro sobre fundo laranja. Arquivos em `public/icons/` (icon.svg, icon-192.png, icon-512.png, icon-maskable-512.png, apple-touch-icon.png, favicon-32.png).
+- Tokens no `resources/css/app.css`: escala `brand-*` e `on-brand` no `@theme`; tokens semânticos (`bg`, `surface`, `surface-2`, `line`, `ink`, `ink-muted`, `brand-text`) no `@theme inline` apontando para variáveis `--kf-*` em `:root`, redefinidas em `@media (prefers-color-scheme: dark)`. Views usam só os semânticos (ex.: `bg-surface`, `text-ink`, `border-line`, `bg-brand-500 text-on-brand`), nunca hex direto.
+- `data-theme="light|dark"` pode forçar um modo num trecho da página (usado na `/dev/ui` para mostrar os dois modos lado a lado). Evitar a variante `dark:` do Tailwind: os tokens semânticos já trocam sozinhos.
+- Fontes: só o subset `latin` do @fontsource (cobre português).
+- Modal: `<dialog>` aberto e fechado pelos eventos `open-modal` / `close-modal` com o nome do modal.
+
+### 2026-10-22 — Telas e regras de interface
+- Telas do MVP aprovadas e salvas em `docs/design/telas/`, com guia em `docs/design/README.md`.
+- Navegação inferior: Hoje, Treino, Ajustes (rótulo de Configurações); oculta durante o treino em andamento. Seção Treino com abas em pílula: Fichas, Histórico, Exercícios, Suplementos.
+- Pré-preenchimento: séries vêm com a carga e as repetições do último treino; a progressão dupla só exibe um aviso de sugestão, sem alterar a carga automaticamente.
+- Timer de descanso em barra fixa no rodapé do treino, com −15 s, +15 s e Pular; inicia ao concluir uma série, com o `rest_seconds` do exercício.
+- Áreas tocáveis com no mínimo 44 px; botões principais com 52 px.
+
+### 2026-10-22 — Implementação do design system (etapa 2)
+- Tokens semânticos extras, além dos da identidade: `brand-soft` / `brand-soft-ink` (fundo e texto das etiquetas, do aviso de progressão e do banner de recordes: `#FFE4CF`/`#963C06` no claro, `#3A2312`/`#FFC79E` no escuro) e `danger`.
+- Barlow Condensed usada em 600 nos títulos e números, como nas telas (a identidade cita 500; o peso 500 também está instalado), e 700 itálico no logo. Barlow em 400, 500 e 600.
+- O "FOCUS" do logo usa `brand-text`, como diz a identidade (as telas mostram `#FF6A00`/`#E85A00`).
+- Componentes auxiliares além da lista do README: `icon` (ícones SVG por nome), `checkbox-box` (caixa compartilhada por `checkbox` e `supplement-item`), `set-table` (cabeçalho Série/Anterior/kg/Reps) e `monogram` (quadrado "KF" da entrada).
+- Interação no cliente com Alpine (já vem com o Livewire): `stepper` liga com `wire:model` via `x-modelable`; `rest-timer` começa com o evento `rest-timer-start` e conta pelo horário de término, para não atrasar com a tela apagada.
+- A tela de entrada mostra "Entrar com Google" como ação principal; o login por e-mail abre em "Entrar com e-mail".

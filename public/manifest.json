@@ -3,57 +3,33 @@
     "short_name": "Keep Focus",
     "description": "Hub pessoal para acompanhar vida e hábitos",
     "start_url": "/hoje",
-    "background_color": "#18181b",
-    "theme_color": "#18181b",
+    "background_color": "#0f0d0c",
+    "theme_color": "#ff6a00",
     "display": "standalone",
     "orientation": "portrait",
     "icons": [
         {
-            "src": "icon-72x72.png",
-            "sizes": "72x72",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "icon-96x96.png",
-            "sizes": "96x96",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "icon-128x128.png",
-            "sizes": "128x128",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "icon-144x144.png",
-            "sizes": "144x144",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "icon-152x152.png",
-            "sizes": "152x152",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "icon-192x192.png",
+            "src": "/icons/icon-192.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "icon-384x384.png",
-            "sizes": "384x384",
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "icon-512x512.png",
+            "src": "/icons/icon-maskable-512.png",
             "sizes": "512x512",
             "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/icons/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
             "purpose": "any"
         }
     ],

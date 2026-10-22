@@ -1,3 +1,100 @@
+@import "@fontsource/barlow/latin-400.css";
+@import "@fontsource/barlow/latin-500.css";
+@import "@fontsource/barlow/latin-600.css";
+@import "@fontsource/barlow-condensed/latin-500.css";
+@import "@fontsource/barlow-condensed/latin-600.css";
+@import "@fontsource/barlow-condensed/latin-700-italic.css";
 @import "tailwindcss";
 
 @source '../views';
+
+@theme {
+    --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+    --font-display:
+        "Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
+
+    --color-brand-50: #fff4ec;
+    --color-brand-100: #ffe4cf;
+    --color-brand-200: #ffc79e;
+    --color-brand-300: #ffa463;
+    --color-brand-400: #ff8533;
+    --color-brand-500: #ff6a00;
+    --color-brand-600: #e85a00;
+    --color-brand-700: #c04a00;
+    --color-brand-800: #963c06;
+    --color-brand-900: #74300a;
+    --color-on-brand: #1a0f08;
+}
+
+/* Semantic tokens: views use only these, so light and dark swap by themselves. */
+@theme inline {
+    --color-bg: var(--kf-bg);
+    --color-surface: var(--kf-surface);
+    --color-surface-2: var(--kf-surface-2);
+    --color-line: var(--kf-line);
+    --color-ink: var(--kf-ink);
+    --color-ink-muted: var(--kf-ink-muted);
+    --color-brand-text: var(--kf-brand-text);
+    --color-brand-soft: var(--kf-brand-soft);
+    --color-brand-soft-ink: var(--kf-brand-soft-ink);
+    --color-danger: var(--kf-danger);
+}
+
+/*
+ * Light values on :root, dark values under prefers-color-scheme.
+ * data-theme forces one mode on a subtree (used by /dev/ui).
+ */
+:root,
+[data-theme="light"] {
+    color-scheme: light;
+    --kf-bg: #faf8f6;
+    --kf-surface: #ffffff;
+    --kf-surface-2: #f3efec;
+    --kf-line: #e5dfda;
+    --kf-ink: #1a1412;
+    --kf-ink-muted: #6b625c;
+    --kf-brand-text: #c04a00;
+    --kf-brand-soft: #ffe4cf;
+    --kf-brand-soft-ink: #963c06;
+    --kf-danger: #c62828;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --kf-bg: #0f0d0c;
+        --kf-surface: #1a1716;
+        --kf-surface-2: #241f1d;
+        --kf-line: #332c29;
+        --kf-ink: #f5f1ee;
+        --kf-ink-muted: #a8a09b;
+        --kf-brand-text: #ffa463;
+        --kf-brand-soft: #3a2312;
+        --kf-brand-soft-ink: #ffc79e;
+        --kf-danger: #f87171;
+    }
+}
+
+[data-theme="dark"] {
+    color-scheme: dark;
+    --kf-bg: #0f0d0c;
+    --kf-surface: #1a1716;
+    --kf-surface-2: #241f1d;
+    --kf-line: #332c29;
+    --kf-ink: #f5f1ee;
+    --kf-ink-muted: #a8a09b;
+    --kf-brand-text: #ffa463;
+    --kf-brand-soft: #3a2312;
+    --kf-brand-soft-ink: #ffc79e;
+    --kf-danger: #f87171;
+}
+
+@layer base {
+    [x-cloak] {
+        display: none !important;
+    }
+
+    body {
+        @apply bg-bg font-sans text-ink antialiased;
+    }
+}

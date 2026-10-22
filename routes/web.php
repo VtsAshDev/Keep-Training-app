@@ -30,3 +30,7 @@ Route::get('/auth/google/callback', function () {
 
     return redirect()->intended(route('today'));
 });
+
+if (app()->isLocal()) {
+    Route::view('/dev/ui', 'dev.ui')->name('dev.ui');
+}

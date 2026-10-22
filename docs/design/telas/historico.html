@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Histórico</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&amp;family=Barlow+Condensed:ital,wght@0,600;1,700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+.d{font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.01em}
+.num{font-variant-numeric:tabular-nums}
+button{font:inherit;cursor:pointer}
+a{color:#FFA463}a:hover{color:#FFC79E}
+</style>
+
+</head>
+<body style="background:#555;display:flex;justify-content:center;padding:24px">
+
+
+<div style="width: 390px; height: 844px; background: #0F0D0C; color: #F5F1EE; font-family: Barlow, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+<header style="padding: 56px 20px 0">
+<h1 class="d" style="font-size: 34px; margin: 0">TREINO</h1>
+<nav aria-label="Seções do treino" style="display: flex; gap: 6px; margin-top: 12px; overflow: hidden">
+<a href="fichas.html" style="min-height: 40px; display: flex; align-items: center; padding: 0 14px; border-radius: 20px; border: 1px solid #332C29; color: #F5F1EE; font-size: 14px; text-decoration: none">Fichas</a>
+<a href="historico.html" aria-current="page" style="min-height: 40px; display: flex; align-items: center; padding: 0 14px; border-radius: 20px; background: #F5F1EE; color: #0F0D0C; font-size: 14px; font-weight: 600; text-decoration: none">Histórico</a>
+<a href="fichas.html" style="min-height: 40px; display: flex; align-items: center; padding: 0 14px; border-radius: 20px; border: 1px solid #332C29; color: #F5F1EE; font-size: 14px; text-decoration: none">Exercícios</a>
+<a href="suplementos.html" style="min-height: 40px; display: flex; align-items: center; padding: 0 14px; border-radius: 20px; border: 1px solid #332C29; color: #F5F1EE; font-size: 14px; text-decoration: none">Suplementos</a>
+</nav>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 16px 20px 20px; overflow: hidden">
+<section style="background: #1A1716; border: 1px solid #332C29; border-radius: 16px; padding: 16px">
+<label style="display: block">
+<span style="display: block; font-size: 13px; color: #A8A09B; margin-bottom: 6px">Evolução de carga</span>
+<select style="width: 100%; height: 44px; padding: 0 12px; font: inherit; font-size: 16px; font-weight: 500; color: #F5F1EE; background: #241F1D; border: 1px solid #332C29; border-radius: 10px">
+<option>Remada curvada</option>
+<option>Puxada frontal</option>
+<option>Rosca direta</option>
+</select>
+</label>
+<div style="display: flex; gap: 20px; margin-top: 14px">
+<div><div style="font-size: 12px; color: #A8A09B">Atual</div><div class="d num" style="font-size: 26px">62,5 <span style="font-size: 15px; color: #A8A09B">kg</span></div></div>
+<div><div style="font-size: 12px; color: #A8A09B">Recorde</div><div class="d num" style="font-size: 26px; color: #FFA463">62,5 <span style="font-size: 15px; color: #A8A09B">× 10</span></div></div>
+<div><div style="font-size: 12px; color: #A8A09B">8 treinos</div><div class="d num" style="font-size: 26px">+12,5 <span style="font-size: 15px; color: #A8A09B">kg</span></div></div>
+</div>
+<svg width="320" height="140" viewBox="0 0 350 140" role="img" aria-label="Carga da remada curvada subiu de 50 kg para 62,5 kg nos últimos 8 treinos" style="display: block; margin-top: 12px; width: 100%; height: auto">
+<line x1="0" y1="20" x2="350" y2="20" stroke="#332C29" stroke-width="1"></line>
+<line x1="0" y1="70" x2="350" y2="70" stroke="#332C29" stroke-width="1"></line>
+<line x1="0" y1="120" x2="350" y2="120" stroke="#332C29" stroke-width="1"></line>
+<polyline points="20,120 64,100 108,80 152,80 196,60 240,40 284,40 328,20" fill="none" stroke="#FF6A00" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></polyline>
+<circle cx="20" cy="120" r="4" fill="#FF6A00"></circle><circle cx="64" cy="100" r="4" fill="#FF6A00"></circle><circle cx="108" cy="80" r="4" fill="#FF6A00"></circle><circle cx="152" cy="80" r="4" fill="#FF6A00"></circle><circle cx="196" cy="60" r="4" fill="#FF6A00"></circle><circle cx="240" cy="40" r="4" fill="#FF6A00"></circle><circle cx="284" cy="40" r="4" fill="#FF6A00"></circle><circle cx="328" cy="20" r="6" fill="#FF6A00" stroke="#1A1716" stroke-width="2"></circle>
+</svg>
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: #A8A09B; margin-top: 4px"><span>3 set</span><span>22 out</span></div>
+</section>
+<div style="font-size: 13px; color: #A8A09B; margin-top: 4px">Treinos recentes</div>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 0 14px; background: #1A1716; border: 1px solid #332C29; border-radius: 12px">
+<span class="d" style="width: 36px; height: 36px; border-radius: 10px; background: #241F1D; display: flex; align-items: center; justify-content: center; font-size: 20px">B</span>
+<span style="flex: 1"><span style="display: block; font-weight: 500">Quinta, 22 out</span><span class="num" style="font-size: 13px; color: #A8A09B">54 min · 8.420 kg · 2 recordes</span></span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 0 14px; background: #1A1716; border: 1px solid #332C29; border-radius: 12px">
+<span class="d" style="width: 36px; height: 36px; border-radius: 10px; background: #241F1D; display: flex; align-items: center; justify-content: center; font-size: 20px">A</span>
+<span style="flex: 1"><span style="display: block; font-weight: 500">Terça, 20 out</span><span class="num" style="font-size: 13px; color: #A8A09B">61 min · 9.150 kg</span></span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 0 14px; background: #1A1716; border: 1px solid #332C29; border-radius: 12px">
+<span class="d" style="width: 36px; height: 36px; border-radius: 10px; background: #241F1D; display: flex; align-items: center; justify-content: center; font-size: 20px">D</span>
+<span style="flex: 1"><span style="display: block; font-weight: 500">Segunda, 19 out</span><span class="num" style="font-size: 13px; color: #A8A09B">47 min · 5.880 kg</span></span>
+</div>
+</main>
+<nav aria-label="Navegação principal" style="display: flex; border-top: 1px solid #332C29; background: #1A1716; padding: 6px 8px 26px">
+<a href="hoje.html" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 0; color: #A8A09B; text-decoration: none; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>Hoje</a>
+<a href="fichas.html" aria-current="page" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 0; color: #FF6A00; text-decoration: none; font-size: 12px; font-weight: 600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"></path></svg>Treino</a>
+<a href="configuracoes.html" style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 0; color: #A8A09B; text-decoration: none; font-size: 12px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"></path><circle cx="15" cy="7" r="2"></circle><circle cx="9" cy="17" r="2"></circle></svg>Ajustes</a>
+</nav>
+</div>
+
+
+</body>
+</html>

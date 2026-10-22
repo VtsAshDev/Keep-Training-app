@@ -53,27 +53,17 @@ new class extends Component
 };
 ?>
 
-<div>
-    <form wire:submit="login">
-        <label>
-            {{ __('Email') }}
-            <input type="email" wire:model="email" required>
-        </label>
-        @error('email') <span>{{ $message }}</span> @enderror
+<div x-data="{ withEmail: @js($errors->any()) }" class="flex flex-col gap-3">
+    <x-ui.button wire:click="loginGoogle" class="w-full">{{ __('Sign in with Google') }}</x-ui.button>
 
-        <label>
-            {{ __('Password') }}
-            <input type="password" wire:model="password" required>
-        </label>
-        @error('password') <span>{{ $message }}</span> @enderror
+    <x-ui.button variant="ghost" x-show="! withEmail" x-on:click="withEmail = true" class="w-full">{{ __('Sign in with email') }}</x-ui.button>
 
-        <label>
-            <input type="checkbox" wire:model="remember">
-            {{ __('Remember me') }}
-        </label>
-
-        <button type="submit">{{ __('Log in') }}</button>
+    <form x-show="withEmail" x-cloak wire:submit="login" class="flex flex-col gap-4">
+        <x-ui.input :label="__('Email')" type="email" wire:model="email" autocomplete="email" required />
+        <x-ui.input :label="__('Password')" type="password" wire:model="password" autocomplete="current-password" required />
+        <x-ui.checkbox :label="__('Remember me')" wire:model="remember" />
+        <x-ui.button type="submit" variant="secondary" class="w-full">{{ __('Log in') }}</x-ui.button>
     </form>
 
-    <button wire:click="loginGoogle" type="button">{{ __('Sign in with Google') }}</button>
+    <p class="text-center text-[13px] text-ink-muted">{{ __('Install it on your phone from the browser menu') }}</p>
 </div>
