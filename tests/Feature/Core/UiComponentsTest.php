@@ -77,9 +77,11 @@ test('card variants', function (string $variant, string $class) {
     'dashed' => ['dashed', 'border-dashed border-brand-500'],
 ]);
 
-test('modal listens for its own name', function () {
+// wire:ignore.self: without it, any Livewire update (search, validation error) closed the open modal.
+test('modal listens for its own name and survives Livewire updates', function () {
     $this->blade('<x-ui.modal name="swap-plan" title="Trocar ficha">Corpo<x-slot:footer>Rodapé</x-slot></x-ui.modal>')
         ->assertSee('<dialog', false)
+        ->assertSee('wire:ignore.self', false)
         ->assertSee('swap-plan', false)
         ->assertSeeInOrder(['Trocar ficha', 'Corpo', 'Rodapé']);
 });
