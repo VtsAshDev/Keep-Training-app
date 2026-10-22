@@ -32,6 +32,7 @@ Antes de concluir qualquer tarefa, rode Pint, PHPStan e Pest e garanta que tudo 
 - Toda Action tem teste em Pest. Regras de borda (rodízio, dia de treino, progressão, meta semanal) têm testes dedicados.
 - Telas montadas apenas com componentes do design system (`components/ui/`). Nada de classes Tailwind longas repetidas nas views.
 - Branch por fase ou feature. Merge na `main` somente com CI verde.
+- Todo commit explica, no corpo da mensagem e de forma enxuta, tudo o que foi feito: uma linha por mudança relevante, em português, fácil de entender sem abrir o diff.
 
 ## Arquitetura por módulos
 
@@ -181,6 +182,8 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - **2026-10-22** — As migrations `diet_plans` e `diet_plan_items` são mantidas no repositório, sem models nem telas. Dieta continua fora do escopo do MVP.
 - **2026-10-22** — O componente legado `components/tabs/⚡suplementacao.blade.php` fica no lugar, fora da navegação e sem rota, como referência até ser substituído pelas Actions e telas do módulo Treino.
 - **2026-10-22** — Os ícones do PWA (`public/icon-*.png`, `apple-touch-icon.png`, `favicon.svg`) são provisórios ("KF" sobre fundo escuro) até a identidade da etapa 2.
+
+- **2026-10-22** — Todo commit traz no corpo um resumo enxuto de tudo o que foi feito (ver "Convenções").
 
 ### 2026-10-22 — Identidade visual
 - Sensação: energética e esportiva.
