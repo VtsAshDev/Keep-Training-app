@@ -56,6 +56,10 @@ jobs:
             git fetch --all
             git reset --hard origin/main
             docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/app" -w /app composer:latest composer install --no-interaction --prefer-dist --optimize-autoloader
+            # Backup of the SQLite database before every migration; keeps the last 10.
+            mkdir -p database/backups
+            if [ -f database/database.sqlite ]; then cp database/database.sqlite "database/backups/database-$(date +%Y%m%d-%H%M%S).sqlite"; fi
+            ls -1t database/backups/*.sqlite 2>/dev/null | tail -n +11 | xargs -r rm --
             ./vendor/bin/sail artisan migrate --force
             ./vendor/bin/sail artisan optimize:clear
             ./vendor/bin/sail artisan optimize

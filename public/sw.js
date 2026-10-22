@@ -1,51 +1,50 @@
-const CACHE_NAME = "laravel-pwa-1785982576";
+// Keep Focus service worker. Bump CACHE_VERSION on every release that changes the files below.
+const CACHE_VERSION = "keep-focus-v1";
 const OFFLINE_URL = "/offline.html";
 
-const FILES_TO_CACHE = ["/", OFFLINE_URL];
+const PRECACHE = [
+    OFFLINE_URL,
+    "/manifest.json",
+    "/icons/icon.svg",
+    "/icons/icon-192.png",
+    "/icons/icon-512.png",
+    "/icons/favicon-32.png",
+];
 
-// Pre-cache critical resources
 self.addEventListener("install", (event) => {
-    console.log("[Laravel PWA] Service Worker installing...");
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE)),
+        caches
+            .open(CACHE_VERSION)
+            .then((cache) => cache.addAll(PRECACHE))
+            .then(() => self.skipWaiting()),
     );
 });
 
-// Remove old caches
 self.addEventListener("activate", (event) => {
-    console.log("[Laravel PWA] Service Worker activated.");
     event.waitUntil(
-        caches.keys().then((keys) =>
-            Promise.all(
-                keys.map((key) => {
-                    if (key !== CACHE_NAME) {
-                        return caches.delete(key);
-                    }
-                }),
-            ),
-        ),
+        caches
+            .keys()
+            .then((keys) =>
+                Promise.all(
+                    keys
+                        .filter((key) => key !== CACHE_VERSION)
+                        .map((key) => caches.delete(key)),
+                ),
+            )
+            .then(() => self.clients.claim()),
     );
-    self.clients.claim();
 });
 
-// Listen for skip waiting message
-self.addEventListener("message", (event) => {
-    if (event.data && event.data.type === "SKIP_WAITING") {
-        self.skipWaiting();
-    }
-});
-
-// Fetch strategy
 self.addEventListener("fetch", (event) => {
-    const request = event.request;
+    const { request } = event;
+    const url = new URL(request.url);
 
-    // ✅ Never cache non-GET requests (fix Cache.put POST error)
-    if (request.method !== "GET") {
-        event.respondWith(fetch(request));
+    // Only same-origin GETs; Livewire updates, logins and forms always go to the network.
+    if (request.method !== "GET" || url.origin !== self.location.origin) {
         return;
     }
 
-    // ✅ Handle page navigation (offline fallback)
+    // Pages are never cached (they are personal and change all the time); offline shows the fallback.
     if (request.mode === "navigate") {
         event.respondWith(
             fetch(request).catch(() => caches.match(OFFLINE_URL)),
@@ -53,95 +52,25 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
-    // ✅ Cache-first for static assets
+    // Built assets have hashed names and icons rarely change: cache first.
     if (
-        request.destination === "style" ||
-        request.destination === "script" ||
-        request.destination === "image" ||
-        request.destination === "font"
+        url.pathname.startsWith("/build/") ||
+        url.pathname.startsWith("/icons/")
     ) {
         event.respondWith(
-            caches.match(request).then((cached) => {
-                return (
+            caches.match(request).then(
+                (cached) =>
                     cached ||
                     fetch(request).then((response) => {
-                        return caches.open(CACHE_NAME).then((cache) => {
-                            cache.put(request, response.clone());
-                            return response;
-                        });
-                    })
-                );
-            }),
+                        if (response.ok) {
+                            const copy = response.clone();
+                            caches
+                                .open(CACHE_VERSION)
+                                .then((cache) => cache.put(request, copy));
+                        }
+                        return response;
+                    }),
+            ),
         );
-        return;
-    }
-
-    // ✅ Default: network-first with cache fallback
-    event.respondWith(
-        fetch(request)
-            .then((response) => {
-                return caches.open(CACHE_NAME).then((cache) => {
-                    cache.put(request, response.clone());
-                    return response;
-                });
-            })
-            .catch(async (error) => {
-                // Retry failed API requests if Background Sync is supported
-                if (request.method === "POST" && "SyncManager" in self) {
-                    // We can't easily queue it here because we can't access IndexedDB easily without a library or boilerplate
-                    // But we've already handled form submissions in background-sync.js
-                }
-                return caches.match(request);
-            }),
-    );
-});
-
-// Background Sync
-self.addEventListener("sync", (event) => {
-    if (event.tag === "laravel-pwa-sync") {
-        event.waitUntil(syncRequests());
     }
 });
-
-async function syncRequests() {
-    const db = await openDB();
-    const tx = db.transaction("offline-requests", "readonly");
-    const store = tx.objectStore("offline-requests");
-    const requests = await getAllRequests(store);
-
-    for (const req of requests) {
-        try {
-            const response = await fetch(req.url, {
-                method: req.method,
-                headers: req.headers,
-                body: req.body,
-            });
-
-            if (response.ok) {
-                const deleteTx = db.transaction(
-                    "offline-requests",
-                    "readwrite",
-                );
-                deleteTx.objectStore("offline-requests").delete(req.id);
-            }
-        } catch (err) {
-            console.error("[Laravel PWA] Sync failed for:", req.url, err);
-        }
-    }
-}
-
-function openDB() {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open("laravel-pwa-sync", 1);
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-    });
-}
-
-function getAllRequests(store) {
-    return new Promise((resolve, reject) => {
-        const request = store.getAll();
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-    });
-}

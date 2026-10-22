@@ -33,5 +33,7 @@
             "purpose": "any"
         }
     ],
-    "lang": "pt-BR"
+    "lang": "pt-BR",
+    "id": "/hoje",
+    "scope": "/"
 }
