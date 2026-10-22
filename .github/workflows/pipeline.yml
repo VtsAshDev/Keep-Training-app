@@ -51,16 +51,14 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
+            set -e
             cd /opt/projects/Keep-Training-app
             git config --global --add safe.directory /opt/projects/Keep-Training-app
             git fetch --all
             git reset --hard origin/main
             docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/app" -w /app composer:latest composer install --no-interaction --prefer-dist --optimize-autoloader
-            # Backup of the SQLite database before every migration; keeps the last 10.
-            mkdir -p database/backups
-            if [ -f database/database.sqlite ]; then cp database/database.sqlite "database/backups/database-$(date +%Y%m%d-%H%M%S).sqlite"; fi
-            ls -1t database/backups/*.sqlite 2>/dev/null | tail -n +11 | xargs -r rm --
-            ./vendor/bin/sail artisan migrate --force
+            # Backup, rehearsal on a copy and only then the real migration (stops the deploy on failure).
+            bash scripts/deploy-migrate.sh
             ./vendor/bin/sail artisan optimize:clear
             ./vendor/bin/sail artisan optimize
             ./vendor/bin/sail artisan view:cache

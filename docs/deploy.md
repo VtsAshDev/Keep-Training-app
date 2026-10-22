@@ -99,7 +99,7 @@ Só trocar o `.env` no momento do merge: antes disso, a `main` ainda roda o Keep
 ## Merge e deploy
 
 1. Abrir o PR da última branch da transição para a `main` e esperar o CI verde.
-2. Fazer o merge. O deploy da `main` roda sozinho e agora faz um backup do SQLite em `database/backups/` antes do `migrate` (guarda os 10 mais recentes).
+2. Fazer o merge. O deploy da `main` roda sozinho: faz backup do SQLite em `database/backups/` (guarda os 10 mais recentes), ensaia as migrations numa cópia e só migra o banco real se o ensaio passar (`scripts/deploy-migrate.sh`). Se falhar, o deploy para com o banco intacto.
 3. Conferir na VPS o resumo `Legacy supplements copied` no log e abrir `/hoje`.
 4. Renomear o repositório no GitHub (o GitHub redireciona o endereço antigo; atualizar o `git remote` local quando quiser). O caminho na VPS (`/opt/projects/Keep-Training-app`) pode continuar o mesmo.
 
