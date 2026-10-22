@@ -2,6 +2,37 @@
 
 Domínio: **https://keep-focus.luvcode.tech**. A VPS continua servindo o Keep Training a partir da `main` até o merge final; nada aqui deve ser aplicado antes da validação da etapa 5.
 
+## Roteiro com os scripts
+
+Os passos abaixo estão automatizados em dois scripts; o resto deste documento explica cada um.
+
+1. **No WSL**, baixar e validar a cópia do banco (não altera a produção):
+   ```bash
+   scripts/validate-production-db.sh root@187.77.60.230
+   ```
+   Todas as linhas precisam terminar em ✔. Mande o resultado antes de seguir.
+2. **À mão:** registro `A` de `keep-focus` para `187.77.60.230` no painel do DNS, e as duas URLs no Google Cloud Console (seção "Google Cloud Console").
+3. **Copiar o script para a VPS:**
+   ```bash
+   scp scripts/vps-launch.sh root@187.77.60.230:/root/
+   ```
+4. **Na VPS**, com o DNS já respondendo:
+   ```bash
+   bash /root/vps-launch.sh nginx     # site do Nginx + certificado SSL
+   ```
+5. **Na hora do lançamento**, na VPS:
+   ```bash
+   bash /root/vps-launch.sh env       # backup + .env do Keep Focus (use "env --new-key" para trocar o APP_KEY)
+   ```
+   Logo em seguida, fazer o merge da `KT-20` na `main` pelo GitHub (CI verde) e esperar o deploy.
+6. **Depois do deploy**, na VPS:
+   ```bash
+   bash /root/vps-launch.sh check     # migrations, resumo da cópia dos suplementos e HTTPS
+   ```
+7. Reinstalar o PWA no celular e testar o fluxo (seção "Depois do deploy").
+
+Para voltar atrás: os backups do banco e do `.env` ficam em `/root/keep-focus-backups/` (gerados por `vps-launch.sh backup` e `env`) e em `database/backups/` (gerados pelo deploy).
+
 ## Antes do merge
 
 1. **Backup do banco de produção.** Copiar `database/database.sqlite` da VPS para um lugar seguro fora do servidor.
