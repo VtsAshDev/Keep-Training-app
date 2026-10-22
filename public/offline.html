@@ -1,67 +1,27 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="title" content="Keep Focus">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Sem conexão · Keep Focus</title>
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
     <style>
-        .error_body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            height: 100vh;
-            width: 100%;
-            background: #f9f9f9;
-        }
-
-        .error_container .error_heading {
-            color: transparent;
-            font-size: 160px;
-            margin: 0;
-            font-weight: 900;
-            letter-spacing: 20px;
-            background-size: 100% 100%;
-            background: linear-gradient(90deg, #6b719b 38%, #9da3cc 53%, #979dce 65%);
-            -webkit-background-clip: text;
-            -moz-background-clip: text;
-            -ms-background-clip: text;
-        }
-
-        @media (max-width: 540px) {
-            .error_container .error_heading {
-                font-size: 120px;
-                letter-spacing: 10px;
-            }
-        }
-
-        .error_container .error_btn {
-            background-color: #6e749e !important;
-            border: none;
-            outline: none;
-        }
-
-        .error_container .error_btn:focus {
-            box-shadow: none !important;
-        }
-
-        .error_container .error_message,
-        .error_container .error_paragraph {
-            color: #787878;
-        }
+        /* Static fallback served by the service worker; it cannot load the Vite build, so the
+           Keep Focus tokens are repeated here. */
+        :root { color-scheme: light dark; --bg: #faf8f6; --ink: #1a1412; --muted: #6b625c; --brand: #ff6a00; --on-brand: #1a0f08; --brand-text: #c04a00; }
+        @media (prefers-color-scheme: dark) { :root { --bg: #0f0d0c; --ink: #f5f1ee; --muted: #a8a09b; --brand-text: #ffa463; } }
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; padding: 28px; background: var(--bg); color: var(--ink); font-family: Barlow, system-ui, sans-serif; }
+        .mark { width: 72px; height: 72px; border-radius: 18px; background: var(--brand); color: var(--on-brand); display: grid; place-items: center; font: italic 700 40px/1 "Barlow Condensed", "Arial Narrow", sans-serif; }
+        h1 { margin: 24px 0 0; font: 600 40px/1.05 "Barlow Condensed", "Arial Narrow", sans-serif; text-transform: uppercase; }
+        p { margin: 12px 0 0; max-width: 320px; font-size: 17px; line-height: 1.5; color: var(--muted); }
+        button { margin-top: 28px; min-height: 52px; border: 0; border-radius: 12px; background: var(--brand); color: var(--on-brand); font: 600 17px system-ui, sans-serif; cursor: pointer; }
     </style>
 </head>
 <body>
-<div class="error_body">
-    <div
-        class="container error_container d-flex justify-content-center align-items-center flex-column w-100 h-100 p-5 text-center">
-        <h2 class="error_message text-center mb-3">Boo! You don't have an internet connection</h2>
-        <p class="error_paragraph text-center mb-5">
-            Please check your network connection and try again.
-        </p>
-        <a href="/" class="btn btn-primary error_btn">Back to Home Page</a>
-    </div>
-</div>
+    <div class="mark" aria-hidden="true">KF</div>
+    <h1>Sem conexão</h1>
+    <p>O Keep Focus precisa de internet para carregar seus treinos. Assim que a conexão voltar, é só tentar de novo.</p>
+    <button type="button" onclick="location.reload()">Tentar de novo</button>
 </body>
 </html>

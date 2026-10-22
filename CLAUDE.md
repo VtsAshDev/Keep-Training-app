@@ -13,7 +13,8 @@ Este arquivo é a referência do projeto para escopo, convenções, modelo de da
 - Etapa 2 (Design system): **concluída** na branch `KT-16`, revisada pelo dono em `/dev/ui`.
 - Etapa 3 (Dados e regras do Treino): **concluída** na branch `KT-17`.
 - Etapa 4 (Telas do Treino e tela Hoje): **concluída** na branch `KT-18`.
-- Etapa em andamento: **5. Migração de dados** na branch `KT-19`: migration de cópia pronta e testada; falta validar com a cópia do banco de produção.
+- Etapa 5 (Migração de dados): migration de cópia pronta e testada na branch `KT-19`; **falta validar com a cópia do banco de produção**.
+- Etapa em andamento: **6. Infraestrutura e lançamento** na branch `KT-20`: código pronto (service worker, página offline, backup no deploy); passos do dono em `docs/deploy.md`.
 
 ## Stack
 
@@ -177,7 +178,6 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 
 ## Decisões em aberto
 
-- Novo domínio do Keep Focus.
 - Manter SQLite em produção ou migrar para MySQL/PostgreSQL antes do lançamento.
 - API externa para o catálogo padrão de exercícios.
 
@@ -193,6 +193,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - **2026-10-22** — Todo commit traz no corpo um resumo enxuto de tudo o que foi feito (ver "Convenções").
 - **2026-10-22** — Catálogo de exercícios: por enquanto não há catálogo padrão; o usuário cadastra os próprios exercícios. `exercises.user_id` continua aceitando nulo para receber depois um catálogo vindo de uma API externa.
 - **2026-10-22** — Unidade de carga fixa em kg (`weight_kg`); a linha "Unidade de carga" em Ajustes é só informativa.
+- **2026-10-22** — Domínio do Keep Focus: `keep-focus.luvcode.tech`. Roteiro de lançamento em `docs/deploy.md`.
 - **2026-10-22** — Timezone da aplicação `America/Sao_Paulo` (`APP_TIMEZONE`): define a data do dia de treino, dos registros de suplemento e a semana de segunda a domingo.
 
 ### 2026-10-22 — Identidade visual
@@ -252,3 +253,9 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - A migration não tem volta (`down` vazio): para desfazer, restaurar o backup feito antes de migrar. Ela grava no log um resumo (`Legacy supplements copied`) com o total copiado e o que foi ignorado.
 - As tabelas e models antigos (`suplementos`, `consumo_diario`, `Suplemento`, `ConsumoDiario`) continuam até a cópia ser validada com o banco de produção; depois saem numa migration própria.
 - Validação com a cópia de produção: copiar o arquivo para `/tmp` dentro do container, rodar `php artisan migrate` com `DB_DATABASE` apontando para a cópia e comparar as contagens das tabelas antigas e novas com o resumo do log.
+
+### 2026-10-22 — PWA e deploy (etapa 6)
+- O service worker (`public/sw.js`) é registrado em `resources/js/app.js`. Ele guarda só arquivos estáticos (`/build/`, `/icons/`) e a página offline; páginas nunca vão para o cache, porque são pessoais. Sem conexão, mostra `public/offline.html`. Cada release que mudar ícones, manifest ou a página offline aumenta `CACHE_VERSION`.
+- `public/offline.html` repete os tokens da identidade em CSS próprio, porque o service worker serve o arquivo sem o build do Vite.
+- Removidos `public/pwa-install.js` e `public/background-sync.js` do pacote `ladumor/laravel-pwa`: nunca foram carregados, e sincronização offline está fora do escopo.
+- O deploy da `main` faz backup de `database/database.sqlite` em `database/backups/` antes de cada `migrate` e mantém os 10 mais recentes.
