@@ -1,78 +1,100 @@
 @import "@fontsource/barlow/latin-400.css";
 @import "@fontsource/barlow/latin-500.css";
 @import "@fontsource/barlow/latin-600.css";
-@import "@fontsource/barlow/latin-700.css";
+@import "@fontsource/barlow-condensed/latin-500.css";
 @import "@fontsource/barlow-condensed/latin-600.css";
-@import "@fontsource/barlow-condensed/latin-700.css";
 @import "@fontsource/barlow-condensed/latin-700-italic.css";
 @import "tailwindcss";
 
 @source '../views';
 
-/*
- * Semantic colors keep light and dark values side by side in light-dark().
- * The mode follows the system through color-scheme; data-theme forces one
- * mode on a subtree.
- */
 @theme {
     --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
     --font-display:
         "Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
 
-    --color-brand-50: #fff4eb;
-    --color-brand-100: #ffe4cc;
-    --color-brand-200: #ffc799;
-    --color-brand-300: #ffa25c;
-    --color-brand-400: #ff8329;
+    --color-brand-50: #fff4ec;
+    --color-brand-100: #ffe4cf;
+    --color-brand-200: #ffc79e;
+    --color-brand-300: #ffa463;
+    --color-brand-400: #ff8533;
     --color-brand-500: #ff6a00;
-    --color-brand-600: #e05a00;
-    --color-brand-700: #b84800;
-    --color-brand-800: #8f3800;
-    --color-brand-900: #6b2a00;
-    --color-brand-950: #3d1700;
+    --color-brand-600: #e85a00;
+    --color-brand-700: #c04a00;
+    --color-brand-800: #963c06;
+    --color-brand-900: #74300a;
     --color-on-brand: #1a0f08;
 }
 
+/* Semantic tokens: views use only these, so light and dark swap by themselves. */
 @theme inline {
-    --color-surface: var(--surface);
-    --color-surface-raised: var(--surface-raised);
-    --color-surface-muted: var(--surface-muted);
-    --color-ink: var(--ink);
-    --color-ink-muted: var(--ink-muted);
-    --color-line: var(--line);
-    --color-accent: var(--accent);
-    --color-danger: var(--danger);
-    --color-success: var(--success);
+    --color-bg: var(--kf-bg);
+    --color-surface: var(--kf-surface);
+    --color-surface-2: var(--kf-surface-2);
+    --color-line: var(--kf-line);
+    --color-ink: var(--kf-ink);
+    --color-ink-muted: var(--kf-ink-muted);
+    --color-brand-text: var(--kf-brand-text);
+    --color-brand-soft: var(--kf-brand-soft);
+    --color-brand-soft-ink: var(--kf-brand-soft-ink);
+    --color-danger: var(--kf-danger);
+}
+
+/*
+ * Light values on :root, dark values under prefers-color-scheme.
+ * data-theme forces one mode on a subtree (used by /dev/ui).
+ */
+:root,
+[data-theme="light"] {
+    color-scheme: light;
+    --kf-bg: #faf8f6;
+    --kf-surface: #ffffff;
+    --kf-surface-2: #f3efec;
+    --kf-line: #e5dfda;
+    --kf-ink: #1a1412;
+    --kf-ink-muted: #6b625c;
+    --kf-brand-text: #c04a00;
+    --kf-brand-soft: #ffe4cf;
+    --kf-brand-soft-ink: #963c06;
+    --kf-danger: #c62828;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --kf-bg: #0f0d0c;
+        --kf-surface: #1a1716;
+        --kf-surface-2: #241f1d;
+        --kf-line: #332c29;
+        --kf-ink: #f5f1ee;
+        --kf-ink-muted: #a8a09b;
+        --kf-brand-text: #ffa463;
+        --kf-brand-soft: #3a2312;
+        --kf-brand-soft-ink: #ffc79e;
+        --kf-danger: #f87171;
+    }
+}
+
+[data-theme="dark"] {
+    color-scheme: dark;
+    --kf-bg: #0f0d0c;
+    --kf-surface: #1a1716;
+    --kf-surface-2: #241f1d;
+    --kf-line: #332c29;
+    --kf-ink: #f5f1ee;
+    --kf-ink-muted: #a8a09b;
+    --kf-brand-text: #ffa463;
+    --kf-brand-soft: #3a2312;
+    --kf-brand-soft-ink: #ffc79e;
+    --kf-danger: #f87171;
 }
 
 @layer base {
-    :root {
-        color-scheme: light dark;
-    }
-
-    /* Redeclared on every [data-theme] so the subtree resolves its own mode. */
-    :root,
-    [data-theme] {
-        --surface: light-dark(#f7f4f1, #0f0d0c);
-        --surface-raised: light-dark(#ffffff, #1a1614);
-        --surface-muted: light-dark(#efe9e3, #26201c);
-        --ink: light-dark(#1c1714, #f5f0eb);
-        --ink-muted: light-dark(#6b615a, #a89d94);
-        --line: light-dark(#e3dcd5, #362e29);
-        --accent: light-dark(#b84800, #ff8329);
-        --danger: light-dark(#c62828, #f87171);
-        --success: light-dark(#2e7d32, #4ade80);
-    }
-
-    [data-theme="light"] {
-        color-scheme: light;
-    }
-
-    [data-theme="dark"] {
-        color-scheme: dark;
+    [x-cloak] {
+        display: none !important;
     }
 
     body {
-        @apply bg-surface font-sans text-ink antialiased;
+        @apply bg-bg font-sans text-ink antialiased;
     }
 }

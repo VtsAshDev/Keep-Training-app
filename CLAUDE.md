@@ -11,7 +11,7 @@ Este arquivo é a referência do projeto para escopo, convenções, modelo de da
 - Branches seguem o padrão do hook `commit-msg` (`KT-<n>`, ex.: `KT-15`); commits no formato `KT-<n>: [TIPO]:Descrição`. A `main` e a VPS continuam rodando o Keep Training até a etapa 6.
 - Etapa 1 (Base limpa): **concluída** na branch `KT-15`.
 - Etapa em andamento: **2. Design system** (ver "Plano de transição" e a decisão de identidade visual).
-- A primeira versão do design system (branch `KT-16`) foi feita antes do design de referência e ainda diverge dele: nomes de tokens (`accent`, `surface-raised`, `surface-muted`, sem `bg`), valores da escala brand e dos neutros, pesos das fontes, local dos ícones (raiz de `public/` em vez de `public/icons/`), rótulo "Configurações" em vez de "Ajustes" na navegação e componentes específicos ainda não criados. Alinhar ao design antes de concluir a etapa 2.
+- Design system alinhado ao design de referência na branch `KT-16`; falta a revisão visual do dono em `/dev/ui` para concluir a etapa 2.
 
 ## Stack
 
@@ -187,7 +187,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - **2026-10-22** — O login por e-mail e senha (componente `core.login`) é mantido, ao lado do login Google.
 - **2026-10-22** — As migrations `diet_plans` e `diet_plan_items` são mantidas no repositório, sem models nem telas. Dieta continua fora do escopo do MVP.
 - **2026-10-22** — O componente legado `components/tabs/⚡suplementacao.blade.php` fica no lugar, fora da navegação e sem rota, como referência até ser substituído pelas Actions e telas do módulo Treino.
-- **2026-10-22** — Os ícones do PWA foram provisórios na etapa 1. Na `KT-16` viraram o monograma "KF" (#1A0F08 sobre #FF6A00), ainda na raiz de `public/`; a identidade visual define os arquivos em `public/icons/`.
+- **2026-10-22** — Os ícones do PWA foram provisórios na etapa 1; agora são o monograma "KF" em `public/icons/`, conforme a identidade visual.
 - **2026-10-22** — Todo commit traz no corpo um resumo enxuto de tudo o que foi feito (ver "Convenções").
 
 ### 2026-10-22 — Identidade visual
@@ -211,3 +211,11 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - Pré-preenchimento: séries vêm com a carga e as repetições do último treino; a progressão dupla só exibe um aviso de sugestão, sem alterar a carga automaticamente.
 - Timer de descanso em barra fixa no rodapé do treino, com −15 s, +15 s e Pular; inicia ao concluir uma série, com o `rest_seconds` do exercício.
 - Áreas tocáveis com no mínimo 44 px; botões principais com 52 px.
+
+### 2026-10-22 — Implementação do design system (etapa 2)
+- Tokens semânticos extras, além dos da identidade: `brand-soft` / `brand-soft-ink` (fundo e texto das etiquetas, do aviso de progressão e do banner de recordes: `#FFE4CF`/`#963C06` no claro, `#3A2312`/`#FFC79E` no escuro) e `danger`.
+- Barlow Condensed usada em 600 nos títulos e números, como nas telas (a identidade cita 500; o peso 500 também está instalado), e 700 itálico no logo. Barlow em 400, 500 e 600.
+- O "FOCUS" do logo usa `brand-text`, como diz a identidade (as telas mostram `#FF6A00`/`#E85A00`).
+- Componentes auxiliares além da lista do README: `icon` (ícones SVG por nome), `checkbox-box` (caixa compartilhada por `checkbox` e `supplement-item`), `set-table` (cabeçalho Série/Anterior/kg/Reps) e `monogram` (quadrado "KF" da entrada).
+- Interação no cliente com Alpine (já vem com o Livewire): `stepper` liga com `wire:model` via `x-modelable`; `rest-timer` começa com o evento `rest-timer-start` e conta pelo horário de término, para não atrasar com a tela apagada.
+- A tela de entrada mostra "Entrar com Google" como ação principal; o login por e-mail abre em "Entrar com e-mail".

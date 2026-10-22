@@ -1,12 +1,14 @@
+{{-- Wordmark as text. stacked puts FOCUS under KEEP, as on the entry screen. --}}
 @props([
     'size' => 'md',
+    'stacked' => false,
 ])
 
 <span {{ $attributes->class([
-    'font-display font-bold uppercase italic leading-none tracking-tight text-ink',
+    'inline-block font-display font-bold uppercase italic leading-[.95] text-ink',
     match ($size) {
-        'sm' => 'text-xl',
-        'lg' => 'text-5xl',
-        default => 'text-3xl',
+        'sm' => 'text-[26px]',
+        'lg' => 'text-[64px]',
+        default => 'text-[40px]',
     },
-]) }}>Keep <span class="text-brand-500">Focus</span></span>
+]) }}>Keep{!! $stacked ? '<br>' : ' ' !!}<span class="text-brand-text">Focus</span></span>
