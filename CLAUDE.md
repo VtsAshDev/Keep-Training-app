@@ -10,8 +10,8 @@ Este arquivo é a referência do projeto para escopo, convenções, modelo de da
 
 - Branches seguem o padrão do hook `commit-msg` (`KT-<n>`, ex.: `KT-15`); commits no formato `KT-<n>: [TIPO]:Descrição`. A `main` e a VPS continuam rodando o Keep Training até a etapa 6.
 - Etapa 1 (Base limpa): **concluída** na branch `KT-15`.
-- Etapa em andamento: **2. Design system** (ver "Plano de transição" e a decisão de identidade visual).
-- Design system alinhado ao design de referência na branch `KT-16`; falta a revisão visual do dono em `/dev/ui` para concluir a etapa 2.
+- Etapa 2 (Design system): **concluída** na branch `KT-16`, revisada pelo dono em `/dev/ui`.
+- Próxima etapa: **3. Dados e regras do Treino** (ver "Plano de transição").
 
 ## Stack
 
@@ -212,7 +212,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - Timer de descanso em barra fixa no rodapé do treino, com −15 s, +15 s e Pular; inicia ao concluir uma série, com o `rest_seconds` do exercício.
 - Áreas tocáveis com no mínimo 44 px; botões principais com 52 px.
 
-### 2026-10-22 — Implementação do design system (etapa 2)
+### 2026-10-22 — Implementação do design system (etapa 2, aprovada pelo dono)
 - Tokens semânticos extras, além dos da identidade: `brand-soft` / `brand-soft-ink` (fundo e texto das etiquetas, do aviso de progressão e do banner de recordes: `#FFE4CF`/`#963C06` no claro, `#3A2312`/`#FFC79E` no escuro) e `danger`.
 - Barlow Condensed usada em 600 nos títulos e números, como nas telas (a identidade cita 500; o peso 500 também está instalado), e 700 itálico no logo. Barlow em 400, 500 e 600.
 - O "FOCUS" do logo usa `brand-text`, como diz a identidade (as telas mostram `#FF6A00`/`#E85A00`).
