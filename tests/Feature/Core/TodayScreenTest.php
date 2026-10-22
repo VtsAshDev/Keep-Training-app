@@ -74,3 +74,12 @@ test('cannot toggle a supplement of another user', function () {
         ->toThrow(ModelNotFoundException::class);
     expect($foreign->logs()->count())->toBe(0);
 });
+
+test('the supplements counter is hidden while none is available yet', function () {
+    $user = User::factory()->create();
+    Supplement::factory()->for($user)->trainingDays()->create();
+
+    $this->actingAs($user)->get('/hoje')
+        ->assertSee('Se treinar hoje')
+        ->assertDontSee('0 de 0');
+});

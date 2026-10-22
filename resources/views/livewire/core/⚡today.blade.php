@@ -153,9 +153,11 @@ new class extends Component
             <p class="mt-1.5 text-[15px]">{{ __('Add what you take to check it off here every day.') }}</p>
             <a href="{{ route('training.supplements') }}" wire:navigate class="mt-2.5 mb-2 inline-block text-sm text-brand-text">{{ __('Add supplement') }}</a>
         @else
-            <x-slot:aside>
-                <span class="text-sm text-ink-muted tabular-nums">{{ __(':done of :total', ['done' => $available->where('taken', true)->count(), 'total' => $available->count()]) }}</span>
-            </x-slot>
+            @if ($available->isNotEmpty())
+                <x-slot:aside>
+                    <span class="text-sm text-ink-muted tabular-nums">{{ __(':done of :total', ['done' => $available->where('taken', true)->count(), 'total' => $available->count()]) }}</span>
+                </x-slot>
+            @endif
             <div class="mt-1">
                 @foreach ($supplements as $item)
                     @php
