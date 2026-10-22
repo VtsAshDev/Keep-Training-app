@@ -194,6 +194,7 @@ Todas as tabelas têm `id` e timestamps. Exceto os exercícios padrão, todas t�
 - **2026-10-22** — Catálogo de exercícios: por enquanto não há catálogo padrão; o usuário cadastra os próprios exercícios. `exercises.user_id` continua aceitando nulo para receber depois um catálogo vindo de uma API externa.
 - **2026-10-22** — Unidade de carga fixa em kg (`weight_kg`); a linha "Unidade de carga" em Ajustes é só informativa.
 - **2026-10-22** — Domínio do Keep Focus: `keep-focus.luvcode.tech`. Roteiro de lançamento em `docs/deploy.md`.
+- **2026-10-22** — Mensagens de validação em português em `lang/pt_BR/validation.php`, com nomes amigáveis para os campos dos formulários (`attributes`); regras não traduzidas caem no inglês do framework.
 - **2026-10-22** — Timezone da aplicação `America/Sao_Paulo` (`APP_TIMEZONE`): define a data do dia de treino, dos registros de suplemento e a semana de segunda a domingo.
 
 ### 2026-10-22 — Identidade visual
