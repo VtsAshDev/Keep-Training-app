@@ -132,10 +132,24 @@ check() {
     curl -fsS "https://$DOMAIN/manifest.json" | grep -q '"name": "Keep Focus"' && ok "Manifest do Keep Focus no ar" || echo "Aviso: o manifest ainda não é o do Keep Focus."
 }
 
+usage() {
+    cat <<USAGE
+Uso: bash vps-launch.sh <etapa>
+
+  backup          copia o banco e o .env para $BACKUP_DIR
+  nginx           cria o site do Nginx para $DOMAIN e pede o certificado SSL
+  env [--new-key] atualiza o .env para o Keep Focus (mantém APP_KEY e credenciais do Google);
+                  com --new-key, gera um APP_KEY novo
+  check           depois do deploy: migrations, resumo da cópia dos suplementos e HTTPS
+
+Todas as etapas podem ser repetidas. DNS e Google Cloud Console são feitos à mão (docs/deploy.md).
+USAGE
+}
+
 case "${1:-}" in
     backup) backup ;;
     nginx) nginx_site ;;
     env) env_file "${2:-}" ;;
     check) check ;;
-    *) sed -n '2,10p' "$0"; exit 1 ;;
+    *) usage; exit 1 ;;
 esac
