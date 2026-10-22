@@ -14,14 +14,14 @@ Domínio: **https://keep-focus.luvcode.tech**. A VPS continua servindo o Keep Tr
 ## DNS, Nginx e SSL
 
 1. **DNS:** registro `A` de `keep-focus.luvcode.tech` apontando para o IP da VPS (ou `CNAME` para o host atual do `keep-training.luvcode.tech`).
-2. **Nginx:** um `server` para `keep-focus.luvcode.tech` com o mesmo proxy usado hoje pelo Keep Training (o app confia no proxy e lê `X-Forwarded-Proto`, então o proxy precisa enviar esse cabeçalho). Exemplo, ajustando a porta ao `APP_PORT` do Sail na VPS:
+2. **Nginx:** um `server` para `keep-focus.luvcode.tech` com o mesmo proxy usado hoje pelo Keep Training (o app confia no proxy e lê `X-Forwarded-Proto`, então o proxy precisa enviar esse cabeçalho). O Sail na VPS escuta na porta do `APP_PORT` (hoje `8082`):
 
    ```nginx
    server {
        server_name keep-focus.luvcode.tech;
 
        location / {
-           proxy_pass http://127.0.0.1:80;
+           proxy_pass http://127.0.0.1:8082;
            proxy_set_header Host $host;
            proxy_set_header X-Real-IP $remote_addr;
            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -43,7 +43,7 @@ No cliente OAuth usado hoje:
 
 ## `.env` da VPS
 
-Alterar ou adicionar:
+Alterar ou adicionar (manter `APP_PORT=8082`, `APP_SERVICE`, `APP_KEY` e as credenciais do Google que já existem na VPS):
 
 ```dotenv
 APP_NAME="Keep Focus"
@@ -61,7 +61,9 @@ SESSION_SECURE_COOKIE=true
 GOOGLE_REDIRECT_URI=https://keep-focus.luvcode.tech/auth/google/callback
 ```
 
-Trocar `APP_NAME` muda o nome do cookie de sessão (`keep-focus-session`): todo mundo precisa entrar de novo uma vez.
+Trocar `APP_NAME` muda o nome do cookie de sessão (`keep-focus-session`): todo mundo precisa entrar de novo uma vez. Por isso, o lançamento também é um bom momento para gerar um `APP_KEY` novo (`./vendor/bin/sail artisan key:generate --force`), que derruba as sessões antigas.
+
+Só trocar o `.env` no momento do merge: antes disso, a `main` ainda roda o Keep Training.
 
 ## Merge e deploy
 
