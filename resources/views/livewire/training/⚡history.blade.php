@@ -33,11 +33,6 @@ new class extends Component
 };
 ?>
 
-@php
-    use App\Support\Dates;
-    use App\Support\Weight;
-@endphp
-
 <x-ui.page>
     <x-slot:header>
         <x-training.header active="history" />

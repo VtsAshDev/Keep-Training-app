@@ -40,8 +40,6 @@ new class extends Component
 ?>
 
 @php
-    use App\Support\Dates;
-    use App\Support\Weight;
     $exercises = $allExercises ? $summary->exercises : array_slice($summary->exercises, 0, 3);
     $hidden = count($summary->exercises) - count($exercises);
     $plan = $summary->session->plan;

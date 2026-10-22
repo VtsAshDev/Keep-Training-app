@@ -57,7 +57,6 @@ new class extends Component
 ?>
 
 @php
-    use App\Support\Dates;
     $available = $supplements->where('available', true);
 @endphp
 
